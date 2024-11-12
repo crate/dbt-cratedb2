@@ -83,19 +83,16 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
+        cratedb-version: [ 'nightly' ]
 
     services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+      cratedb:
+        image: crate/crate:${{ matrix.cratedb-version }}
         ports:
+          - 4200:4200
           - 5432:5432
+        env:
+          CRATE_HEAP_SIZE: 4g
 
     steps:
       - name: Check out repository
@@ -117,14 +114,14 @@ jobs:
             ${{ inputs.dbt_common_branch }}
           cat pyproject.toml
 
-      - name: Setup postgres
+      - name: Setup database
         run: psql -f ./scripts/setup_test_database.sql
         env:
           PGHOST: localhost
           PGPORT: 5432
-          PGUSER: postgres
-          PGPASSWORD: postgres
-          PGDATABASE: postgres
+          PGUSER: crate
+          PGPASSWORD: ""
+          PGDATABASE: crate
 
       - name: Setup `hatch`
         uses: dbt-labs/dbt-adapters/.github/actions/setup-hatch@main
@@ -136,7 +133,7 @@ jobs:
         env:
           POSTGRES_TEST_HOST: localhost
           POSTGRES_TEST_PORT: 5432
-          POSTGRES_TEST_USER: root
-          POSTGRES_TEST_PASS: password
-          POSTGRES_TEST_DATABASE: dbt
+          POSTGRES_TEST_USER: crate
+          POSTGRES_TEST_PASS: ""
+          POSTGRES_TEST_DATABASE: crate
           POSTGRES_TEST_THREADS: 4

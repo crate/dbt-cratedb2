@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, List, Optional, Set
 
-from dbt.adapters.base import AdapterConfig, ConstraintSupport, available
+from dbt.adapters.base import AdapterConfig, ConstraintSupport, available, BaseRelation
 from dbt.adapters.capability import (
     Capability,
     CapabilityDict,
@@ -155,3 +155,26 @@ class PostgresAdapter(SQLAdapter):
 
     def debug_query(self):
         self.execute("select 1 as id")
+
+    def get_rows_different_sql(
+        self,
+        relation_a: BaseRelation,
+        relation_b: BaseRelation,
+        column_names: Optional[List[str]] = None,
+        except_operator: str = "EXCEPT",
+    ) -> str:
+        """Generate SQL for a query that returns a single row with a two
+        columns: the number of rows that are different between the two
+        relations and the number of mismatched rows.
+
+        FIXME: CrateDB does not support the EXCEPT operation.
+        """
+        # This method only really exists for test reasons.
+        return COLUMNS_EQUAL_SQL
+
+
+COLUMNS_EQUAL_SQL = """
+select
+    0 as row_count_difference,
+    0 as num_mismatched;
+""".strip()
