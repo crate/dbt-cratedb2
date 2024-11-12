@@ -1,5 +1,5 @@
 name: ☣️ Regression
-description: Report a regression you've observed in a newer version of dbt-postgres
+description: Report a regression you've observed in a newer version of dbt-cratedb2
 title: "[Regression] <title>"
 labels: ["regression", "triage"]
 body:
@@ -57,13 +57,13 @@ body:
         examples:
           - **OS**: Ubuntu 20.04
           - **Python**: 3.11.6 (`python3 --version`)
-          - **dbt-postgres (working version)**: 1.1.0 (`dbt --version`)
-          - **dbt-postgres (regression version)**: 1.2.0 (`dbt --version`)
+          - **dbt-cratedb2 (working version)**: 0.1.0 (`dbt --version`)
+          - **dbt-cratedb2 (regression version)**: 0.2.0 (`dbt --version`)
       value: |
         - OS:
         - Python:
-        - dbt-postgres (working version):
-        - dbt-postgres (regression version):
+        - dbt-cratedb2 (working version):
+        - dbt-cratedb2 (regression version):
       render: markdown
     validations:
       required: true

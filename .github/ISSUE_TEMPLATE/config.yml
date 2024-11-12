@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: Ask the community for help
-    url: https://github.com/dbt-labs/docs.getdbt.com/discussions
+    url: https://community.cratedb.com/
     about: Need help troubleshooting? Check out our guide on how to ask
-  - name: Contact dbt Cloud support
-    url: mailto:support@getdbt.com
-    about: Are you using dbt Cloud? Contact our support team for help!
-  - name: Participate in Discussions
-    url: https://github.com/dbt-labs/dbt-postgres/discussions
-    about: Do you have a Big Idea for dbt-postgres? Read open discussions, or start a new one
+  - name: Contact CrateDB Cloud and CrateDB Enterprise support
+    url: https://support.cratedb.com/
+    about: Are you using CrateDB Cloud? Contact our support team for help!
+  - name: General CrateDB support information
+    url: https://cratedb.com/support
+    about: About CrateDB support contacts and knowledge

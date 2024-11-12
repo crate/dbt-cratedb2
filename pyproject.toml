@@ -1,18 +1,18 @@
 [project]
 dynamic = ["version"]
-name = "dbt-postgres"
-description = "The set of adapter protocols and base functionality that supports integration with dbt-core"
+name = "dbt-cratedb2"
+description = "dbt adapter for CrateDB 5.x, derived from dbt-postgres"
 readme = "README.md"
-keywords = ["dbt", "adapter", "adapters", "database", "elt", "dbt-core", "dbt Core", "dbt Cloud", "dbt Labs", "postgres"]
+keywords = ["dbt", "adapter", "cratedb", "adapters", "database", "elt", "dbt-core", "dbt-adapter", "postgresql"]
 requires-python = ">=3.9.0"
 authors = [
-    { name = "dbt Labs", email = "info@dbtlabs.com" },
+    { name = "Crate.io", email = "office@crate.io" },
 ]
 maintainers = [
-    { name = "dbt Labs", email = "info@dbtlabs.com" },
+    { name = "Crate.io", email = "office@crate.io" },
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows",
@@ -29,14 +29,15 @@ dependencies = [
     "dbt-core>=1.8.0",
     # installed via dbt-adapters but used directly
     "dbt-common>=1.0.4,<2.0",
+    # "dbt-postgres==1.9.0b1",
     "agate>=1.0,<2.0",
 ]
 [project.urls]
-Homepage = "https://github.com/dbt-labs/dbt-postgres"
-Documentation = "https://docs.getdbt.com"
-Repository = "https://github.com/dbt-labs/dbt-postgres.git"
-Issues = "https://github.com/dbt-labs/dbt-postgres/issues"
-Changelog = "https://github.com/dbt-labs/dbt-postgres/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/crate-workbench/dbt-cratedb2"
+Documentation = "https://dbt-cratedb2.readthedocs.io/"
+Repository = "https://github.com/crate-workbench/dbt-cratedb2.git"
+Issues = "https://github.com/crate-workbench/dbt-cratedb2/issues"
+Changelog = "https://github.com/crate-workbench/dbt-cratedb2/blob/main/CHANGELOG.md"
 
 [build-system]
 requires = ["hatchling"]
@@ -71,14 +72,14 @@ DBT_TEST_USER_3 = "dbt_test_user_3"
 [tool.hatch.envs.default.scripts]
 setup = "pre-commit install"
 code-quality = "pre-commit run --all-files"
-unit-tests = "python -m pytest {args:tests/unit}"
-integration-tests = "python -m pytest {args:tests/functional}"
+unit-tests = "python -m pytest -vvv {args:tests/unit}"
+integration-tests = "python -m pytest -vvv {args:tests/functional}"
 docker-dev = [
     "echo Does not support integration testing, only development and unit testing. See issue https://github.com/dbt-labs/dbt-postgres/issues/99",
-	"docker build -f docker/dev.Dockerfile -t dbt-postgres-dev .",
-	"docker run --rm -it --name dbt-postgres-dev -v $(pwd):/opt/code dbt-postgres-dev",
+	"docker build -f docker/dev.Dockerfile -t dbt-cratedb2-dev .",
+	"docker run --rm -it --name dbt-cratedb2-dev -v $(pwd):/opt/code dbt-cratedb2-dev",
 ]
-docker-prod = "docker build -f docker/Dockerfile -t dbt-postgres ."
+docker-prod = "docker build -f docker/Dockerfile -t dbt-cratedb2 ."
 
 [tool.hatch.envs.build]
 detached = true
@@ -95,12 +96,12 @@ check-all = [
 check-wheel = [
     "twine check dist/*",
     "find ./dist/dbt_postgres-*.whl -maxdepth 1 -type f | xargs python -m pip install --force-reinstall --find-links=dist/",
-    "pip freeze | grep dbt-postgres",
+    "pip freeze | grep dbt-cratedb2",
 ]
 check-sdist = [
     "check-wheel-contents dist/*.whl --ignore W007,W008",
     "find ./dist/dbt_postgres-*.gz -maxdepth 1 -type f | xargs python -m pip install --force-reinstall --find-links=dist/",
-    "pip freeze | grep dbt-postgres",
+    "pip freeze | grep dbt-cratedb2",
 ]
 
 [tool.pytest]

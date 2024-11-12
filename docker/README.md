@@ -3,38 +3,38 @@ This docker file is suitable for building dbt Docker images locally or using wit
 
 
 ## Building an image:
-This Dockerfile can create images for the following target: `dbt-postgres`
+This Dockerfile can create images for the following target: `dbt-cratedb2`
 
 In order to build a new image, run the following docker command.
 ```shell
-docker build --tag <your_image_name> --target dbt-postgres <path/to/dockerfile>
+docker build --tag <your_image_name> --target dbt-cratedb2 <path/to/dockerfile>
 ```
 ---
 > **Note:**  Docker must be configured to use [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/) in order for images to build properly!
 
 ---
 
-By default the image will be populated with the latest version of `dbt-postgres` on `main`.
+By default the image will be populated with the latest version of `dbt-cratedb2` on `main`.
 If you need to use a different version you can specify it by git ref using the `--build-arg` flag:
 ```shell
 docker build --tag <your_image_name> \
-  --target dbt-postgres \
+  --target dbt-cratedb2 \
   --build-arg commit_ref=<commit_ref> \
   <path/to/dockerfile>
 ```
 
 ### Examples:
-To build an image named "my-dbt" that supports Postgres using the latest releases:
+To build an image named "my-dbt" that supports CrateDB using the latest releases:
 ```shell
-docker build --tag my-dbt --target dbt-postgres .
+docker build --tag my-dbt --target dbt-cratedb2 .
 ```
 
-To build an image named "my-other-dbt" that supports Postgres using the adapter version 1.8.0:
+To build an image named "my-other-dbt" that supports CrateDB using the adapter version 1.8.0:
 ```shell
 cd dbt-core/docker
 docker build \
   --tag my-other-dbt \
-  --target dbt-postgres \
+  --target dbt-cratedb2 \
   --build-arg commit_ref=v1.8.0 \
   .
 ```
