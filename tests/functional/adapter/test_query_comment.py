@@ -20,7 +20,7 @@ class TestMacroQueryComments(BaseMacroQueryComments):
 class TestMacroArgsQueryComments(BaseMacroArgsQueryComments):
     @pytest.mark.skip(
         "This test is incorrectly comparing the version of `dbt-core`"
-        "to the version of `dbt-postgres`, which is not always the same."
+        "to the version of `dbt-cratedb2`, which is not the same."
     )
     def test_matches_comment(self, project, get_package_version):
         pass

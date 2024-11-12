@@ -25,7 +25,7 @@ ENV LANG=C.UTF-8
 RUN python -m pip install --upgrade "pip==24.0" "setuptools==69.2.0" "wheel==0.43.0" --no-cache-dir
 
 
-FROM base AS dbt-postgres
+FROM base AS dbt-cratedb2
 
 ARG commit_ref=main
 
@@ -34,4 +34,4 @@ HEALTHCHECK CMD dbt --version || exit 1
 WORKDIR /usr/app/dbt/
 ENTRYPOINT ["dbt"]
 
-RUN python -m pip install --no-cache-dir "dbt-postgres @ git+https://github.com/dbt-labs/dbt-postgres@${commit_ref}"
+RUN python -m pip install --no-cache-dir "dbt-cratedb2 @ git+https://github.com/crate-workbench/dbt-cratedb2@${commit_ref}"

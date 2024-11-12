@@ -14,7 +14,7 @@
   {% if arg_dict["unique_key"] %}
     {% do return(adapter.dispatch('get_incremental_merge_sql', 'dbt')(arg_dict)) %}
   {% else %}
-    {{ exceptions.raise_compiler_error("dbt-postgres 'microbatch' requires a `unique_key` config") }}
+    {{ exceptions.raise_compiler_error("dbt-cratedb2 'microbatch' requires a `unique_key` config") }}
   {% endif %}
 
 {% endmacro %}

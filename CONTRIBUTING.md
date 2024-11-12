@@ -1,4 +1,4 @@
-# Contributing to `dbt-postgres`
+# Contributing to `dbt-cratedb2`
 
 - [About this document](#about-this-document)
 - [Getting the code](#getting-the-code)
@@ -10,8 +10,8 @@
 
 ## About this document
 
-This document is a guide for anyone interested in contributing to `dbt-postgres`.
-It outlines how to install `dbt-postgres` for development,
+This document is a guide for anyone interested in contributing to `dbt-cratedb2`.
+It outlines how to install `dbt-cratedb2` for development,
 run tests locally, update documentation, and submit pull requests.
 This guide assumes users are developing on a Linux or MacOS system.
 The following utilities are needed or will be installed in this guide:
@@ -19,19 +19,18 @@ The following utilities are needed or will be installed in this guide:
 - `pip`
 - `virturalenv`
 - `git`
-- `changie`
 
 If local functional testing is required, then a database instance
 and appropriate credentials are also required.
 
-In addition to this guide, users are highly encouraged to read the `dbt-core`
-[CONTRIBUTING.md](https://github.com/dbt-labs/dbt-core/blob/main/CONTRIBUTING.md).
-Almost all information there is applicable here.
+In addition to this guide, users are highly encouraged to read the [CrateDB
+contribution guidelines](https://github.com/crate/crate/blob/master/CONTRIBUTING.rst).
+Almost all information there is also applicable here.
 
 
 ## Getting the code
 
-`git` is required to download, modify, and sync the `dbt-postgres` code.
+`git` is required to download, modify, and sync the `dbt-cratedb2` code.
 There are several ways to install Git. For MacOS:
 
 - Install [Xcode](https://developer.apple.com/support/xcode/)
@@ -39,27 +38,27 @@ There are several ways to install Git. For MacOS:
 
 ### External contributors
 
-Contributors external to the `dbt-labs` GitHub organization can contribute to `dbt-postgres`
-by forking the `dbt-postgres` repository. For more on forking, check out the
+Contributors external to the `crate` GitHub organization can contribute to `dbt-cratedb2`
+by forking the `dbt-cratedb2` repository. For more on forking, check out the
 [GitHub docs on forking](https://help.github.com/en/articles/fork-a-repo). To contribute:
 
-1. Fork the `dbt-labs/dbt-postgres` repository (e.g. `{forked-org}/dbt-postgres`)
-2. Clone `{forked-org}/dbt-postgres` locally
+1. Fork the `crate-workbench/dbt-cratedb2` repository (e.g. `{forked-org}/dbt-cratedb2`)
+2. Clone `{forked-org}/dbt-cratedb2` locally
 3. Check out a new branch locally
 4. Make changes in the new branch
-5. Push the new branch to `{forked-org}/dbt-postgres`
-6. Open a pull request in `dbt-labs/dbt-postgres` to merge `{forked-org}/dbt-postgres/{new-branch}` into `main`
+5. Push the new branch to `{forked-org}/dbt-cratedb2`
+6. Open a pull request in `crate-workbench/dbt-cratedb2` to merge `{forked-org}/dbt-cratedb2/{new-branch}` into `main`
 
-### dbt Labs contributors
+### CrateDB contributors
 
-Contributors in the `dbt Labs` GitHub organization have push access to the `dbt-postgres` repo.
-Rather than forking `dbt-labs/dbt-postgres`, use `dbt-labs/dbt-postgres` directly. To contribute:
+Contributors in the `crate` GitHub organization have push access to the `dbt-cratedb2` repo.
+Rather than forking `crate-workbench/dbt-cratedb2`, use `crate-workbench/dbt-cratedb2` directly. To contribute:
 
-1. Clone `dbt-labs/dbt-postgres` locally
+1. Clone `crate-workbench/dbt-cratedb2` locally
 2. Check out a new branch locally
 3. Make changes in the new branch
-4. Push the new branch to `dbt-labs/dbt-postgres`
-5. Open a pull request in `dbt-labs/dbt-postgres` to merge `{new-branch}` into `main`
+4. Push the new branch to `crate-workbench/dbt-cratedb2`
+5. Open a pull request in `crate-workbench/dbt-cratedb2` to merge `{new-branch}` into `main`
 
 
 ## Developing
@@ -88,13 +87,13 @@ Rather than forking `dbt-labs/dbt-postgres`, use `dbt-labs/dbt-postgres` directl
    hatch run <command>
    ```
 
-When `dbt-postgres` is installed this way, any changes made to the `dbt-postgres` source code
+When `dbt-cratedb2` is installed this way, any changes made to the `dbt-cratedb2` source code
 will be reflected in the virtual environment immediately.
 
 ## Testing
 
-`dbt-postgres` contains [code quality checks](https://github.com/dbt-labs/dbt-postgres/tree/main/.pre-commit-config.yaml), [unit tests](https://github.com/dbt-labs/dbt-postgres/tree/main/tests/unit),
-and [functional tests](https://github.com/dbt-labs/dbt-postgres/tree/main/tests/functional).
+`dbt-cratedb2` contains [code quality checks](https://github.com/crate-workbench/dbt-cratedb2/tree/main/.pre-commit-config.yaml), [unit tests](https://github.com/crate-workbench/dbt-cratedb2/tree/main/tests/unit),
+and [functional tests](https://github.com/crate-workbench/dbt-cratedb2/tree/main/tests/functional).
 
 ### Code quality
 
@@ -124,7 +123,7 @@ hatch run unit-tests tests/unit/$test_file_name.py::$test_class_name::$test_meth
 
 Functional tests require a database to test against. There are two primary ways to run functional tests:
 
-- Tests will run automatically against a dbt Labs owned database during PR checks
+- Tests on CI will run automatically against a configured database during PR checks
 - Tests can be run locally by configuring a `test.env` file with appropriate `ENV` variables:
    ```shell
    cp test.env.example test.env
@@ -184,37 +183,17 @@ hatch shell
 
 ### User documentation
 
-Many changes will require an update to `dbt-postgres` user documentation.
-All contributors, whether internal or external, are encouraged to open an issue or PR
-in the docs repo when submitting user-facing changes. Here are some relevant links:
-
-- [User docs](https://docs.getdbt.com/)
-  - [Warehouse Profile](https://docs.getdbt.com/reference/warehouse-profiles/)
-  - [Resource Configs](https://docs.getdbt.com/reference/resource-configs/)
-- [User docs repo](https://github.com/dbt-labs/docs.getdbt.com)
-
-### CHANGELOG entry
-
-`dbt-postgres` uses [changie](https://changie.dev) to generate `CHANGELOG` entries.
-Follow the steps to [install `changie`](https://changie.dev/guide/installation/).
-
-Once changie is installed and the PR is created, run:
-   ```shell
-   changie new
-   ```
-`changie` will walk through the process of creating a changelog entry.
-Remember to commit and push the file that's created.
-
-> **_NOTE:_** Do not edit the `CHANGELOG.md` directly.
-> Any modifications will be lost by the consolidation process.
+Many changes will require an update to `dbt-cratedb2` user documentation
+within the `docs/` folder in this repository. Please make sure your patches
+are complete by including relevant updates.
 
 
 ## Submitting a pull request
 
 ### Signing the CLA
 
-> **_NOTE:_** All contributors to `dbt-postgres` must sign the
-> [Contributor License Agreement](https://docs.getdbt.com/docs/contributor-license-agreements)(CLA).
+> **_NOTE:_** All contributors to `dbt-cratedb2` must sign the
+> [Contributor License Agreement](https://cratedb.com/developers/community/contribute)(CLA).
 
 Maintainers will be unable to merge contributions until the contributor signs the CLA.
 This is a one time requirement, not a per-PR requirement.
@@ -222,11 +201,11 @@ Even without a CLA, anyone is welcome to open issues and comment on existing iss
 
 ### Opening a pull request
 
-A `dbt-postgres` maintainer will be assigned to review each PR based on priority and capacity.
+A `dbt-cratedb2` maintainer will be assigned to review each PR based on priority and capacity.
 They may suggest code revisions for style and clarity or they may request additional tests.
-These are good things! dbt Labs believes that contributing high-quality code is a collaborative effort.
-The same process is followed whether the contributor is external or another `dbt-postgres` maintainer.
+These are good things! Crate.io believes that contributing high-quality code is a collaborative effort.
+The same process is followed whether the contributor is external or another `dbt-cratedb2` maintainer.
 Once all tests are passing and the PR has been approved by the appropriate code owners,
-a `dbt-postgres` maintainer will merge the changes into `main`.
+a `dbt-cratedb2` maintainer will merge the changes into `main`.
 
 And that's it! Happy developing :tada:

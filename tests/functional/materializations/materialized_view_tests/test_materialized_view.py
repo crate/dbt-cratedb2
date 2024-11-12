@@ -89,14 +89,14 @@ class PostgresMaterializedViewChanges(MaterializedViewChanges):
 
     @staticmethod
     def change_config_via_replace(project, materialized_view):
-        # dbt-postgres does not currently monitor changes of this type
+        # dbt-cratedb2 does not currently monitor changes of this type
         pass
 
 
 class TestPostgresMaterializedViewChangesApply(
     PostgresMaterializedViewChanges, MaterializedViewChangesApplyMixin
 ):
-    @pytest.mark.skip("dbt-postgres does not currently monitor replace changes.")
+    @pytest.mark.skip("dbt-cratedb2 does not currently monitor replace changes.")
     def test_change_is_applied_via_replace(self, project, my_materialized_view):
         super().test_change_is_applied_via_replace(project, my_materialized_view)
 
@@ -104,7 +104,7 @@ class TestPostgresMaterializedViewChangesApply(
 class TestPostgresMaterializedViewChangesContinue(
     PostgresMaterializedViewChanges, MaterializedViewChangesContinueMixin
 ):
-    @pytest.mark.skip("dbt-postgres does not currently monitor replace changes.")
+    @pytest.mark.skip("dbt-cratedb2 does not currently monitor replace changes.")
     def test_change_is_not_applied_via_replace(self, project, my_materialized_view):
         super().test_change_is_not_applied_via_alter(project, my_materialized_view)
 
@@ -112,6 +112,6 @@ class TestPostgresMaterializedViewChangesContinue(
 class TestPostgresMaterializedViewChangesFail(
     PostgresMaterializedViewChanges, MaterializedViewChangesFailMixin
 ):
-    @pytest.mark.skip("dbt-postgres does not currently monitor replace changes.")
+    @pytest.mark.skip("dbt-cratedb2 does not currently monitor replace changes.")
     def test_change_is_not_applied_via_replace(self, project, my_materialized_view):
         super().test_change_is_not_applied_via_replace(project, my_materialized_view)
