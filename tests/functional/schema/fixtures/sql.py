@@ -101,7 +101,7 @@ select * from {{ ref('view_1') }}
 """
 
 _VALIDATION_SQL = """
-drop table if exists {database}.{schema}.seed cascade;
+drop table if exists {database}.{schema}.seed;
 create table {database}.{schema}.seed (
    id BIGSERIAL PRIMARY KEY,
    first_name VARCHAR(50),
@@ -111,7 +111,7 @@ create table {database}.{schema}.seed (
    ip_address VARCHAR(20)
 );
 
-drop table if exists {database}.{schema}.agg cascade;
+drop table if exists {database}.{schema}.agg;
 create table {database}.{schema}.agg (
    last_name VARCHAR(50),
    count BIGINT

@@ -5,6 +5,8 @@ from typing import Optional, Union
 from dbt.adapters.contracts.connection import AdapterResponse, Credentials
 from dbt.adapters.events.logging import AdapterLogger
 from dbt.adapters.events.types import TypeCodeNotFound
+from dbt_common.events.contextvars import get_node_info
+
 from dbt.adapters.postgres.record import PostgresRecordReplayHandle
 from dbt.adapters.sql import SQLConnectionManager
 from dbt_common.exceptions import DbtDatabaseError, DbtRuntimeError
@@ -74,6 +76,22 @@ class PostgresConnectionManager(SQLConnectionManager):
     def exception_handler(self, sql):
         try:
             yield
+
+            # CrateDB needs synchronization after write operations.
+            # TODO: Only enable optionally?
+            # TODO: Compensate leading comments, e.g. /* {"app": "dbt", [...]
+            # print("SQL:", sql)
+            sql_canonical = sql.strip().upper()
+            is_dml = (
+                sql_canonical.startswith("INSERT")
+                or sql_canonical.startswith("UPDATE")
+                or sql_canonical.startswith("DELETE")
+            )
+            node_info = get_node_info()
+            relation_name = node_info.get("node_relation", {}).get("relation_name")
+            if is_dml and relation_name:
+                refresh_sql = f"REFRESH TABLE {relation_name}"
+                self.execute(refresh_sql)
 
         except psycopg2.DatabaseError as e:
             logger.debug("Postgres error: {}".format(str(e)))

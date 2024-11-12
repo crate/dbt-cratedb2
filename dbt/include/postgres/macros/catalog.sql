@@ -5,6 +5,8 @@
     {#
       If the user has multiple databases set and the first one is wrong, this will fail.
       But we won't fail in the case where there are multiple quoting-difference-only dbs, which is better.
+
+      FIXME: CrateDB does not have `pg_is_other_temp_schema`.
     #}
     {% set database = information_schema.database %}
     {{ adapter.verify_database(database) }}
@@ -41,7 +43,8 @@
         {%- if not loop.last %} or {% endif -%}
       {%- endfor -%}
     )
-      and not pg_is_other_temp_schema(sch.oid) -- not a temporary schema belonging to another session
+      -- FIXME: Do not use `pg_is_other_temp_schema`, CrateDB does not have it.
+      -- and not pg_is_other_temp_schema(sch.oid) -- not a temporary schema belonging to another session
       and tbl.relpersistence in ('p', 'u') -- [p]ermanent table or [u]nlogged table. Exclude [t]emporary tables
       and tbl.relkind in ('r', 'v', 'f', 'p', 'm') -- o[r]dinary table, [v]iew, [f]oreign table, [p]artitioned table, [m]aterialized view. Other values are [i]ndex, [S]equence, [c]omposite type, [t]OAST table
       and col.attnum > 0 -- negative numbers are used for system columns such as oid
