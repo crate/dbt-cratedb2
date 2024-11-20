@@ -1,7 +1,7 @@
-{% macro postgres__last_day(date, datepart) -%}
+{% macro cratedb__last_day(date, datepart) -%}
 
     {%- if datepart == 'quarter' -%}
-    -- postgres dateadd does not support quarter interval.
+    -- cratedb dateadd does not support quarter interval.
     cast(
         {{dbt.dateadd('day', '-1',
         dbt.dateadd('month', '3', dbt.date_trunc(datepart, date))

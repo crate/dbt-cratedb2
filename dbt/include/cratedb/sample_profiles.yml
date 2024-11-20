@@ -2,7 +2,7 @@ default:
   outputs:
 
     dev:
-      type: postgres
+      type: cratedb
       threads: [1 or more]
       host: [host]
       port: [port]
@@ -12,7 +12,7 @@ default:
       schema: [dev_schema]
 
     prod:
-      type: postgres
+      type: cratedb
       threads: [1 or more]
       host: [host]
       port: [port]

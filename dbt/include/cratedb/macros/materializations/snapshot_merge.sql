@@ -1,5 +1,5 @@
 
-{% macro postgres__snapshot_merge_sql(target, source, insert_cols) -%}
+{% macro cratedb__snapshot_merge_sql(target, source, insert_cols) -%}
     {%- set insert_cols_csv = insert_cols | join(', ') -%}
 
     {%- set columns = config.get("snapshot_table_column_names") or get_snapshot_table_column_names() -%}

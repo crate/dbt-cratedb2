@@ -1,5 +1,5 @@
 fixed:
-  type: postgres
+  type: cratedb
 prompts:
   host:
     hint: 'hostname for the instance'

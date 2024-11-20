@@ -1,4 +1,4 @@
-{% macro postgres__datediff(first_date, second_date, datepart) -%}
+{% macro cratedb__datediff(first_date, second_date, datepart) -%}
 
     {% if datepart == 'year' %}
         (date_part('year', ({{second_date}})::date) - date_part('year', ({{first_date}})::date))
@@ -26,7 +26,7 @@
     {% elif datepart == 'microsecond' %}
         ({{ datediff(first_date, second_date, 'minute') }} * 60000000 + floor(date_part('microsecond', ({{second_date}})::timestamp)) - floor(date_part('microsecond', ({{first_date}})::timestamp)))
     {% else %}
-        {{ exceptions.raise_compiler_error("Unsupported datepart for macro datediff in postgres: {!r}".format(datepart)) }}
+        {{ exceptions.raise_compiler_error("Unsupported datepart for macro datediff in cratedb: {!r}".format(datepart)) }}
     {% endif %}
 
 {%- endmacro %}
