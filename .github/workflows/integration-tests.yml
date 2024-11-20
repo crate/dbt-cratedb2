@@ -115,6 +115,7 @@ jobs:
           cat pyproject.toml
 
       - name: Setup database
+        if: false
         run: psql -f ./scripts/setup_test_database.sql
         env:
           PGHOST: localhost
