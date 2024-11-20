@@ -29,7 +29,7 @@ dependencies = [
     "dbt-core>=1.9.0b4",
     # installed via dbt-adapters but used directly
     "dbt-common>=1.0.4,<2.0",
-    # "dbt-postgres==1.9.0b1",
+    "dbt-postgres>=1.9.0b1",
     "agate>=1.0,<2.0",
     "sqlparse<0.6",
     "sql-metadata<3",

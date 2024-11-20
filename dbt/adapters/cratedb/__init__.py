@@ -14,4 +14,5 @@ Plugin = AdapterPlugin(
     adapter=CrateDBAdapter,  # type: ignore
     credentials=CrateDBCredentials,
     include_path=cratedb.PACKAGE_PATH,
+    dependencies=["postgres"],
 )
