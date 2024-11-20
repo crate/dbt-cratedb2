@@ -59,3 +59,28 @@
     SELECT 1
   {%- endcall -%}
 {% endmacro %}
+
+
+{# CrateDB: Does not support `COMMENT ON` statements. #}
+{% macro cratedb__alter_relation_comment(relation, comment) %}
+  {% set escaped_comment = postgres_escape_comment(comment) %}
+  {% if relation.type == 'materialized_view' -%}
+    {% set relation_type = "materialized view" %}
+  {%- else -%}
+    {%- set relation_type = relation.type -%}
+  {%- endif -%}
+  {# comment on {{ relation_type }} {{ relation }} is {{ escaped_comment }}; #}
+  SELECT 1;
+{% endmacro %}
+
+
+{# CrateDB: Does not support `COMMENT ON` statements. #}
+{% macro cratedb__alter_column_comment(relation, column_dict) %}
+  {% set existing_columns = adapter.get_columns_in_relation(relation) | map(attribute="name") | list %}
+  {% for column_name in column_dict if (column_name in existing_columns) %}
+    {% set comment = column_dict[column_name]['description'] %}
+    {% set escaped_comment = postgres_escape_comment(comment) %}
+    {# comment on column {{ relation }}.{{ adapter.quote(column_name) if column_dict[column_name]['quote'] else column_name }} is {{ escaped_comment }}; #}
+    SELECT 1;
+  {% endfor %}
+{% endmacro %}

@@ -180,7 +180,6 @@ addopts = """
     --ignore-glob=tests/functional/test_store_test_failures.py
     --ignore-glob=tests/functional/test_thread_count.py
     --ignore-glob=tests/functional/test_timezones.py
-    --ignore-glob=tests/functional/test_unlogged_table.py
     --ignore-glob=tests/functional/unit_testing/*
 """
 log_level = "DEBUG"
