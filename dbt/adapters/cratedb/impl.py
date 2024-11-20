@@ -21,16 +21,16 @@ from dbt_common.dataclass_schema import ValidationError, dbtClassMixin
 from dbt_common.exceptions import DbtRuntimeError
 from dbt_common.utils import encoding as dbt_encoding
 
-from dbt.adapters.postgres.column import PostgresColumn
-from dbt.adapters.postgres.connections import PostgresConnectionManager
-from dbt.adapters.postgres.relation import PostgresRelation
+from dbt.adapters.cratedb.column import CrateDBColumn
+from dbt.adapters.cratedb.connections import CrateDBConnectionManager
+from dbt.adapters.cratedb.relation import CrateDBRelation
+from dbt.adapters.cratedb.util import SQLStatement
 
-
-GET_RELATIONS_MACRO_NAME = "postgres__get_relations"
+GET_RELATIONS_MACRO_NAME = "cratedb__get_relations"
 
 
 @dataclass
-class PostgresIndexConfig(dbtClassMixin):
+class CrateDBIndexConfig(dbtClassMixin):
     columns: List[str]
     unique: bool = False
     type: Optional[str] = None
@@ -46,7 +46,7 @@ class PostgresIndexConfig(dbtClassMixin):
         return dbt_encoding.md5(string)
 
     @classmethod
-    def parse(cls, raw_index) -> Optional["PostgresIndexConfig"]:
+    def parse(cls, raw_index) -> Optional["CrateDBIndexConfig"]:
         if raw_index is None:
             return None
         try:
@@ -59,17 +59,17 @@ class PostgresIndexConfig(dbtClassMixin):
 
 
 @dataclass
-class PostgresConfig(AdapterConfig):
+class CrateDBConfig(AdapterConfig):
     unlogged: Optional[bool] = None
-    indexes: Optional[List[PostgresIndexConfig]] = None
+    indexes: Optional[List[CrateDBIndexConfig]] = None
 
 
-class PostgresAdapter(SQLAdapter):
-    Relation = PostgresRelation
-    ConnectionManager = PostgresConnectionManager
-    Column = PostgresColumn
+class CrateDBAdapter(SQLAdapter):
+    Relation = CrateDBRelation
+    ConnectionManager = CrateDBConnectionManager
+    Column = CrateDBColumn
 
-    AdapterSpecificConfigs = PostgresConfig
+    AdapterSpecificConfigs = CrateDBConfig
 
     CONSTRAINT_SUPPORT = {
         ConstraintType.check: ConstraintSupport.ENFORCED,
@@ -100,8 +100,8 @@ class PostgresAdapter(SQLAdapter):
         return ""
 
     @available
-    def parse_index(self, raw_index: Any) -> Optional[PostgresIndexConfig]:
-        return PostgresIndexConfig.parse(raw_index)
+    def parse_index(self, raw_index: Any) -> Optional[CrateDBIndexConfig]:
+        return CrateDBIndexConfig.parse(raw_index)
 
     def _link_cached_database_relations(self, schemas: Set[str]):
         """
@@ -124,7 +124,7 @@ class PostgresAdapter(SQLAdapter):
                 self.cache.add_link(referenced, dependent)
 
     def _get_catalog_schemas(self, manifest):
-        # postgres only allow one database (the main one)
+        # cratedb only allow one database (the main one)
         schema_search_map = super()._get_catalog_schemas(manifest)
         try:
             return schema_search_map.flatten()
@@ -171,6 +171,39 @@ class PostgresAdapter(SQLAdapter):
         """
         # This method only really exists for test reasons.
         return COLUMNS_EQUAL_SQL
+
+    def run_sql_for_tests(self, sql, fetch, conn):
+        """
+        This is used by the test suite to invoke SQL statements.
+        """
+        stmt = SQLStatement(sql)
+        cursor = conn.handle.cursor()
+        try:
+            cursor.execute(sql)
+            if stmt.is_dml:
+                for table in stmt.tables:
+                    refresh_sql = f"REFRESH TABLE {table}"
+                    self.execute(refresh_sql)
+            if hasattr(conn.handle, "commit"):
+                conn.handle.commit()
+            if fetch == "one":
+                return cursor.fetchone()
+            elif fetch == "all":
+                return cursor.fetchall()
+            else:
+                return
+        except BaseException as e:
+            if conn.handle and not getattr(conn.handle, "closed", True):
+                # FIXME: CrateDB has no `ROLLBACK`.
+                # TODO: Can it be shaped differently, by overwriting the method?
+                # conn.handle.rollback()
+                if hasattr(conn.handle, "commit"):
+                    conn.handle.commit()
+            print(sql)
+            print(e)
+            raise
+        finally:
+            conn.transaction_open = False
 
 
 COLUMNS_EQUAL_SQL = """

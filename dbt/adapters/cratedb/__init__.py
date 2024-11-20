@@ -1,14 +1,17 @@
 from dbt.adapters.base import AdapterPlugin
 
-from dbt.adapters.postgres.column import PostgresColumn
-from dbt.adapters.postgres.connections import PostgresConnectionManager, PostgresCredentials
-from dbt.adapters.postgres.impl import PostgresAdapter
-from dbt.adapters.postgres.relation import PostgresRelation
-from dbt.include import postgres
+from dbt.adapters.cratedb.column import CrateDBColumn
+from dbt.adapters.cratedb.connections import (
+    CrateDBConnectionManager,
+    CrateDBCredentials,
+)
+from dbt.adapters.cratedb.impl import CrateDBAdapter
+from dbt.adapters.cratedb.relation import CrateDBRelation
+from dbt.include import cratedb
 
 
 Plugin = AdapterPlugin(
-    adapter=PostgresAdapter,  # type: ignore
-    credentials=PostgresCredentials,
-    include_path=postgres.PACKAGE_PATH,
+    adapter=CrateDBAdapter,  # type: ignore
+    credentials=CrateDBCredentials,
+    include_path=cratedb.PACKAGE_PATH,
 )
