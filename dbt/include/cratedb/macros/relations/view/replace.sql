@@ -1,4 +1,4 @@
-{% macro postgres__get_replace_view_sql(relation, sql) -%}
+{% macro cratedb__get_replace_view_sql(relation, sql) -%}
 
     {%- set sql_header = config.get('sql_header', none) -%}
     {{ sql_header if sql_header is not none }}

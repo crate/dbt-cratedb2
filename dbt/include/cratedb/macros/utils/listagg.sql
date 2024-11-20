@@ -1,4 +1,4 @@
-{% macro postgres__listagg(measure, delimiter_text, order_by_clause, limit_num) -%}
+{% macro cratedb__listagg(measure, delimiter_text, order_by_clause, limit_num) -%}
 
     {% if limit_num -%}
     array_to_string(
