@@ -13,14 +13,15 @@ models:
         quote: true
 """
 
+# CrateDB: Does not support "UNLOGGED" tables.
 table_unlogged_sql = """
-{{ config(materialized = 'table', unlogged = True) }}
+{{ config(materialized = 'table', unlogged = False) }}
 
 select 1 as column_a
 """
 
 
-class TestPostgresUnloggedTable:
+class TestUnloggedTable:
     @pytest.fixture(scope="class")
     def models(self):
         return {
@@ -42,14 +43,16 @@ class TestPostgresUnloggedTable:
             }
         }
 
-    def test_postgres_unlogged_table_catalog(self, project):
+    def test_unlogged_table_catalog(self, project):
         table_name = "table_unlogged"
 
         results = run_dbt(["run", "--models", table_name])
         assert len(results) == 1
 
         result = self.get_table_persistence(project, table_name)
-        assert result == "u"
+        # CrateDB: Does not support "UNLOGGED" tables.
+        # assert result == "u"
+        assert result == "p"
 
         catalog = run_dbt(["docs", "generate"])
 
