@@ -12,8 +12,8 @@ from dbt.adapters.relation_configs import (
 )
 from dbt_common.exceptions import DbtRuntimeError
 
-from dbt.adapters.postgres.relation_configs.constants import MAX_CHARACTERS_IN_IDENTIFIER
-from dbt.adapters.postgres.relation_configs.index import (
+from dbt.adapters.cratedb.relation_configs.constants import MAX_CHARACTERS_IN_IDENTIFIER
+from dbt.adapters.cratedb.relation_configs.index import (
     PostgresIndexConfig,
     PostgresIndexConfigChange,
 )

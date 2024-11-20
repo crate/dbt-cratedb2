@@ -31,6 +31,8 @@ dependencies = [
     "dbt-common>=1.0.4,<2.0",
     # "dbt-postgres==1.9.0b1",
     "agate>=1.0,<2.0",
+    "sqlparse<0.6",
+    "sql-metadata<3",
 ]
 [project.urls]
 Homepage = "https://github.com/crate-workbench/dbt-cratedb2"

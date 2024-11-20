@@ -1,10 +1,10 @@
 from dbt.adapters.base import Column
 
 
-class PostgresColumn(Column):
+class CrateDBColumn(Column):
     @property
     def data_type(self):
-        # on postgres, do not convert 'text' or 'varchar' to 'varchar()'
+        # on cratedb, do not convert 'text' or 'varchar' to 'varchar()'
         if self.dtype.lower() == "text" or (
             self.dtype.lower() == "character varying" and self.char_size is None
         ):

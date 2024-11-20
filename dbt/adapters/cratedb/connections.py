@@ -1,13 +1,17 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
+from multiprocessing.context import SpawnContext
 from typing import Optional, Union
 
-from dbt.adapters.contracts.connection import AdapterResponse, Credentials
+from dbt.adapters.contracts.connection import (
+    AdapterResponse,
+    Credentials,
+    AdapterRequiredConfig,
+)
 from dbt.adapters.events.logging import AdapterLogger
 from dbt.adapters.events.types import TypeCodeNotFound
-from dbt_common.events.contextvars import get_node_info
 
-from dbt.adapters.postgres.record import PostgresRecordReplayHandle
+from dbt.adapters.cratedb.record import PostgresRecordReplayHandle
 from dbt.adapters.sql import SQLConnectionManager
 from dbt_common.exceptions import DbtDatabaseError, DbtRuntimeError
 from dbt_common.events.functions import warn_or_error
@@ -17,17 +21,18 @@ from mashumaro.jsonschema.annotations import Maximum, Minimum
 import psycopg2
 from typing_extensions import Annotated
 
+from dbt.adapters.cratedb.util import SQLStatement
 
-logger = AdapterLogger("Postgres")
+logger = AdapterLogger("CrateDB")
 
 
 @dataclass
-class PostgresCredentials(Credentials):
+class CrateDBCredentials(Credentials):
     host: str
     user: str
     # Annotated is used by mashumaro for jsonschema generation
     port: Annotated[Port, Minimum(0), Maximum(65535)]
-    password: str  # on postgres the password is mandatory
+    password: str  # on cratedb the password is mandatory
     connect_timeout: int = 10
     role: Optional[str] = None
     search_path: Optional[str] = None
@@ -43,7 +48,7 @@ class PostgresCredentials(Credentials):
 
     @property
     def type(self):
-        return "postgres"
+        return "cratedb"
 
     @property
     def unique_field(self):
@@ -69,32 +74,38 @@ class PostgresCredentials(Credentials):
         )
 
 
-class PostgresConnectionManager(SQLConnectionManager):
-    TYPE = "postgres"
+class CrateDBConnectionManager(SQLConnectionManager):
+    TYPE = "cratedb"
+
+    def __init__(self, config: AdapterRequiredConfig, mp_context: SpawnContext) -> None:
+        super().__init__(config, mp_context)
+
+    def begin(self):
+        pass
+
+    def commit(self):
+        pass
 
     @contextmanager
     def exception_handler(self, sql):
         try:
             yield
-
-            # CrateDB needs synchronization after write operations.
+            # CrateDB needs write synchronization after DML operations.
             # TODO: Only enable optionally?
-            # TODO: Compensate leading comments, e.g. /* {"app": "dbt", [...]
-            # print("SQL:", sql)
-            sql_canonical = sql.strip().upper()
-            is_dml = (
-                sql_canonical.startswith("INSERT")
-                or sql_canonical.startswith("UPDATE")
-                or sql_canonical.startswith("DELETE")
-            )
-            node_info = get_node_info()
-            relation_name = node_info.get("node_relation", {}).get("relation_name")
-            if is_dml and relation_name:
-                refresh_sql = f"REFRESH TABLE {relation_name}"
-                self.execute(refresh_sql)
+            stmt = SQLStatement(sql)
+            if stmt.is_dml:
+                try:
+                    for table in stmt.tables:
+                        refresh_sql = f"REFRESH TABLE {table}"
+                        try:
+                            self.execute(refresh_sql)
+                        except Exception:
+                            pass
+                except ValueError as ex:
+                    logger.warning(ex)
 
         except psycopg2.DatabaseError as e:
-            logger.debug("Postgres error: {}".format(str(e)))
+            logger.debug("CrateDB error: {}".format(str(e)))
 
             try:
                 self.rollback_if_open()
@@ -124,7 +135,7 @@ class PostgresConnectionManager(SQLConnectionManager):
 
         credentials = cls.get_credentials(connection.credentials)
         kwargs = {}
-        # we don't want to pass 0 along to connect() as postgres will try to
+        # we don't want to pass 0 along to connect() as cratedb will try to
         # call an invalid setsockopt() call (contrary to the docs).
         if credentials.keepalives_idle:
             kwargs["keepalives_idle"] = credentials.keepalives_idle

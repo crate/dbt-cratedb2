@@ -2,7 +2,7 @@ from dbt_common.record import record_function
 
 from dbt.adapters.record import RecordReplayCursor
 
-from dbt.adapters.postgres.record.cursor.status import CursorGetStatusMessageRecord
+from dbt.adapters.cratedb.record.cursor.status import CursorGetStatusMessageRecord
 
 
 class PostgresRecordReplayCursor(RecordReplayCursor):

@@ -9,7 +9,7 @@ from dbt.adapters.relation_configs import (
 )
 from dbt_common.exceptions import DbtRuntimeError
 
-from dbt.adapters.postgres.relation_configs import (
+from dbt.adapters.cratedb.relation_configs import (
     MAX_CHARACTERS_IN_IDENTIFIER,
     PostgresIndexConfig,
     PostgresIndexConfigChange,
@@ -19,7 +19,7 @@ from dbt.adapters.postgres.relation_configs import (
 
 
 @dataclass(frozen=True, eq=False, repr=False)
-class PostgresRelation(BaseRelation):
+class CrateDBRelation(BaseRelation):
     renameable_relations: FrozenSet[RelationType] = field(
         default_factory=lambda: frozenset(
             {
@@ -108,4 +108,4 @@ class PostgresRelation(BaseRelation):
             )
             for index in new_indexes.difference(existing_indexes)
         ]
-        return drop_changes + create_changes
+        return drop_changes + create_changes  # type: ignore[return-value]
