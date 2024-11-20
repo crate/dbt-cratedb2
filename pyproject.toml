@@ -178,7 +178,6 @@ addopts = """
     --ignore-glob=tests/functional/test_relation_name.py
     --ignore-glob=tests/functional/test_severity.py
     --ignore-glob=tests/functional/test_store_test_failures.py
-    --ignore-glob=tests/functional/test_thread_count.py
     --ignore-glob=tests/functional/test_timezones.py
     --ignore-glob=tests/functional/unit_testing/*
 """

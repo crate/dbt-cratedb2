@@ -2,6 +2,7 @@ from dbt.tests.util import run_dbt
 import pytest
 
 
+@pytest.mark.skip("CrateDB: Does not support `pg_sleep`")
 class TestThreadCount:
     @pytest.fixture(scope="class")
     def models(self):
