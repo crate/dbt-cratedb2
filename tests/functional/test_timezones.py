@@ -31,7 +31,7 @@ class TestTimezones:
                         "port": int(os.getenv("POSTGRES_TEST_PORT", 5432)),
                         "user": os.getenv("POSTGRES_TEST_USER", "crate"),
                         "pass": os.getenv("POSTGRES_TEST_PASS", ""),
-                        "dbname": os.getenv("POSTGRES_TEST_DATABASE", "dbt"),
+                        "dbname": os.getenv("POSTGRES_TEST_DATABASE", "crate"),
                         "schema": unique_schema,
                     },
                 },

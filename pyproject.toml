@@ -177,7 +177,6 @@ addopts = """
     --ignore-glob=tests/functional/test_ref_override.py
     --ignore-glob=tests/functional/test_relation_name.py
     --ignore-glob=tests/functional/test_severity.py
-    --ignore-glob=tests/functional/test_timezones.py
     --ignore-glob=tests/functional/unit_testing/*
 """
 log_level = "DEBUG"
