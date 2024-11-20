@@ -1,77 +1,34 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
 from multiprocessing.context import SpawnContext
-from typing import Optional, Union
+from typing import Union
 
 from dbt.adapters.contracts.connection import (
     AdapterResponse,
-    Credentials,
     AdapterRequiredConfig,
 )
 from dbt.adapters.events.logging import AdapterLogger
 from dbt.adapters.events.types import TypeCodeNotFound
+from dbt.adapters.postgres import PostgresCredentials
 
-from dbt.adapters.cratedb.record import PostgresRecordReplayHandle
 from dbt.adapters.sql import SQLConnectionManager
 from dbt_common.exceptions import DbtDatabaseError, DbtRuntimeError
 from dbt_common.events.functions import warn_or_error
-from dbt_common.helper_types import Port
 from dbt_common.record import get_record_mode_from_env, RecorderMode
-from mashumaro.jsonschema.annotations import Maximum, Minimum
 import psycopg2
-from typing_extensions import Annotated
 
+from dbt.adapters.cratedb.record.handle import CrateDBRecordReplayHandle
 from dbt.adapters.cratedb.util import SQLStatement
 
 logger = AdapterLogger("CrateDB")
 
 
 @dataclass
-class CrateDBCredentials(Credentials):
-    host: str
-    user: str
-    # Annotated is used by mashumaro for jsonschema generation
-    port: Annotated[Port, Minimum(0), Maximum(65535)]
-    password: str  # on cratedb the password is mandatory
-    connect_timeout: int = 10
-    role: Optional[str] = None
-    search_path: Optional[str] = None
-    keepalives_idle: int = 0  # 0 means to use the default value
-    sslmode: Optional[str] = None
-    sslcert: Optional[str] = None
-    sslkey: Optional[str] = None
-    sslrootcert: Optional[str] = None
-    application_name: Optional[str] = "dbt"
-    retries: int = 1
-
-    _ALIASES = {"dbname": "database", "pass": "password"}
+class CrateDBCredentials(PostgresCredentials):
 
     @property
     def type(self):
         return "cratedb"
-
-    @property
-    def unique_field(self):
-        return self.host
-
-    def _connection_keys(self):
-        return (
-            "host",
-            "port",
-            "user",
-            "database",
-            "schema",
-            "connect_timeout",
-            "role",
-            "search_path",
-            "keepalives_idle",
-            "sslmode",
-            "sslcert",
-            "sslkey",
-            "sslrootcert",
-            "application_name",
-            "retries",
-        )
 
 
 class CrateDBConnectionManager(SQLConnectionManager):
@@ -183,7 +140,7 @@ class CrateDBConnectionManager(SQLConnectionManager):
             if rec_mode is not None:
                 # If using the record/replay mechanism, regardless of mode, we
                 # use a wrapper.
-                handle = PostgresRecordReplayHandle(handle, connection)
+                handle = CrateDBRecordReplayHandle(handle, connection)
 
             if credentials.role:
                 handle.cursor().execute("set role {}".format(credentials.role))

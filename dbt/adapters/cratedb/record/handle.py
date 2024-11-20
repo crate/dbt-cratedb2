@@ -1,12 +1,5 @@
-from dbt.adapters.record import RecordReplayHandle
-
-from dbt.adapters.cratedb.record.cursor.cursor import PostgresRecordReplayCursor
+from dbt.adapters.postgres.record import PostgresRecordReplayHandle
 
 
-class PostgresRecordReplayHandle(RecordReplayHandle):
-    """A custom extension of RecordReplayHandle that returns
-    a psycopg-specific PostgresRecordReplayCursor object."""
-
-    def cursor(self):
-        cursor = None if self.native_handle is None else self.native_handle.cursor()
-        return PostgresRecordReplayCursor(cursor, self.connection)
+class CrateDBRecordReplayHandle(PostgresRecordReplayHandle):
+    pass

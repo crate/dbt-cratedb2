@@ -4,7 +4,7 @@ from dbt.adapters.contracts.relation import RelationType
 from dbt.adapters.relation_configs.config_change import RelationConfigChangeAction
 
 from dbt.adapters.cratedb.relation import CrateDBRelation
-from dbt.adapters.cratedb.relation_configs import PostgresIndexConfig
+from dbt.adapters.cratedb.relation_configs import CrateDBIndexConfig
 
 
 def test_index_config_changes():
@@ -27,7 +27,7 @@ def test_index_config_changes():
         "method": "btree",
     }
     existing_indexes = frozenset(
-        PostgresIndexConfig.from_dict(index) for index in [index_0_old, index_1_old, index_2_old]
+        CrateDBIndexConfig.from_dict(index) for index in [index_0_old, index_1_old, index_2_old]
     )
 
     index_0_new = deepcopy(index_0_old)
@@ -40,7 +40,7 @@ def test_index_config_changes():
         "method": "hash",
     }
     new_indexes = frozenset(
-        PostgresIndexConfig.from_dict(index) for index in [index_0_new, index_2_new, index_3_new]
+        CrateDBIndexConfig.from_dict(index) for index in [index_0_new, index_2_new, index_3_new]
     )
 
     relation = CrateDBRelation.create(
