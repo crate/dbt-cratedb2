@@ -13,9 +13,8 @@ from dbt.adapters.exceptions import (
     CrossDbReferenceProhibitedError,
     IndexConfigError,
     IndexConfigNotDictError,
-    UnexpectedDbReferenceError,
 )
-from dbt.adapters.sql import SQLAdapter
+from dbt.adapters.postgres import PostgresAdapter
 from dbt_common.contracts.constraints import ConstraintType
 from dbt_common.dataclass_schema import ValidationError, dbtClassMixin
 from dbt_common.exceptions import DbtRuntimeError
@@ -64,19 +63,19 @@ class CrateDBConfig(AdapterConfig):
     indexes: Optional[List[CrateDBIndexConfig]] = None
 
 
-class CrateDBAdapter(SQLAdapter):
+class CrateDBAdapter(PostgresAdapter):
     Relation = CrateDBRelation
-    ConnectionManager = CrateDBConnectionManager
+    ConnectionManager = CrateDBConnectionManager  # type: ignore[assignment]
     Column = CrateDBColumn
 
-    AdapterSpecificConfigs = CrateDBConfig
+    AdapterSpecificConfigs = CrateDBConfig  # type: ignore[assignment]
 
     CONSTRAINT_SUPPORT = {
         ConstraintType.check: ConstraintSupport.ENFORCED,
         ConstraintType.not_null: ConstraintSupport.ENFORCED,
-        ConstraintType.unique: ConstraintSupport.ENFORCED,
+        ConstraintType.unique: ConstraintSupport.NOT_SUPPORTED,
         ConstraintType.primary_key: ConstraintSupport.ENFORCED,
-        ConstraintType.foreign_key: ConstraintSupport.ENFORCED,
+        ConstraintType.foreign_key: ConstraintSupport.NOT_SUPPORTED,
     }
 
     CATALOG_BY_RELATION_SUPPORT = True
@@ -84,20 +83,6 @@ class CrateDBAdapter(SQLAdapter):
     _capabilities: CapabilityDict = CapabilityDict(
         {Capability.SchemaMetadataByRelations: CapabilitySupport(support=Support.Full)}
     )
-
-    @classmethod
-    def date_function(cls):
-        return "now()"
-
-    @available
-    def verify_database(self, database):
-        if database.startswith('"'):
-            database = database.strip('"')
-        expected = self.config.credentials.database
-        if database.lower() != expected.lower():
-            raise UnexpectedDbReferenceError(self.type(), database, expected)
-        # return an empty string on success so macros can call this
-        return ""
 
     @available
     def parse_index(self, raw_index: Any) -> Optional[CrateDBIndexConfig]:
@@ -130,31 +115,6 @@ class CrateDBAdapter(SQLAdapter):
             return schema_search_map.flatten()
         except DbtRuntimeError as exc:
             raise CrossDbReferenceProhibitedError(self.type(), exc.msg)
-
-    def _link_cached_relations(self, manifest) -> None:
-        schemas: Set[str] = set()
-        relations_schemas = self._get_cache_schemas(manifest)
-        for relation in relations_schemas:
-            self.verify_database(relation.database)
-            schemas.add(relation.schema.lower())  # type: ignore
-
-        self._link_cached_database_relations(schemas)
-
-    def _relations_cache_for_schemas(self, manifest, cache_schemas=None):
-        super()._relations_cache_for_schemas(manifest, cache_schemas)
-        self._link_cached_relations(manifest)
-
-    def timestamp_add_sql(self, add_to: str, number: int = 1, interval: str = "hour") -> str:
-        return f"{add_to} + interval '{number} {interval}'"
-
-    def valid_incremental_strategies(self):
-        """The set of standard builtin strategies which this adapter supports out-of-the-box.
-        Not used to validate custom strategies defined by end users.
-        """
-        return ["append", "delete+insert", "merge", "microbatch"]
-
-    def debug_query(self):
-        self.execute("select 1 as id")
 
     def get_rows_different_sql(
         self,
