@@ -34,7 +34,7 @@ class TestOperations:
             "test": {
                 "outputs": {
                     "default": {
-                        "type": "postgres",
+                        "type": "cratedb",
                         "threads": 4,
                         "host": "localhost",
                         "port": int(os.getenv("POSTGRES_TEST_PORT", 5432)),
@@ -44,7 +44,7 @@ class TestOperations:
                         "schema": unique_schema,
                     },
                     "noaccess": {
-                        "type": "postgres",
+                        "type": "cratedb",
                         "threads": 4,
                         "host": "localhost",
                         "port": int(os.getenv("POSTGRES_TEST_PORT", 5432)),
@@ -87,11 +87,15 @@ class TestOperations:
     def test_cannot_connect(self, project):
         self.run_operation("no_args", extra_args=["--target", "noaccess"], expect_pass=False)
 
+    # TODO: Refactor into an `OPTIMIZE TABLE` command?
+    @pytest.mark.skip("CrateDB does not provide the `vacuum` operation")
     def test_vacuum(self, project):
         run_dbt(["run"])
         # this should succeed
         self.run_operation("vacuum", table_name="model")
 
+    # TODO: Refactor into an `OPTIMIZE TABLE` command?
+    @pytest.mark.skip("CrateDB does not provide the `vacuum` operation")
     def test_vacuum_ref(self, project):
         run_dbt(["run"])
         # this should succeed

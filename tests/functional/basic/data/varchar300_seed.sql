@@ -1,4 +1,5 @@
-ALTER TABLE {schema}.seed ALTER COLUMN "GenDEr" TYPE varchar(300);
+-- TODO: CrateDB can't do `ALTER TABLE ... ALTER COLUMN ...`.
+-- ALTER TABLE {schema}.seed ALTER COLUMN "GenDEr" TYPE varchar(300)
 
 insert into {schema}.seed (first_name, last_name, email, "GenDEr", ip_address) values
 ('Annie', 'Reynolds', 'areynolds0@nifty.com', 'Amerisource Bergen', '133.30.242.211'),

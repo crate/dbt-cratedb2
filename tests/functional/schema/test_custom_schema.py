@@ -105,7 +105,7 @@ class TestCustomSchemaWithPrefix(BaseTestCustomSchema):
             "custom_macro.sql": _CUSTOM_MACRO_W_CONFIG,
         }
 
-    def test__postgres__custom_schema_with_prefix(self, project, macros):
+    def test__cratedb__custom_schema_with_prefix(self, project, macros):
         project.run_sql(_VALIDATION_SQL)
         run_dbt(["seed"])
         results = run_dbt(["run"])
@@ -147,7 +147,7 @@ class TestCustomSchemaWithPrefixAndDispatch(BaseTestCustomSchema):
             ],
         }
 
-    def test__postgres__custom_schema_with_prefix_and_dispatch(
+    def test__cratedb__custom_schema_with_prefix_and_dispatch(
         self, project, macros, project_config_update
     ):
         project.run_sql(_VALIDATION_SQL)
@@ -197,9 +197,7 @@ class TestCustomSchemaWithCustomMacroFromModelName(BaseTestCustomSchema):
             "table_3.sql": _TABLE_THREE_DOT_MODEL,
         }
 
-    def test__postgres__custom_schema_from_model_name(
-        self, project, macros, project_config_update
-    ):
+    def test__cratedb__custom_schema_from_model_name(self, project, macros, project_config_update):
         project.run_sql(_VALIDATION_SQL)
         run_dbt(["seed"])
         results = run_dbt(["run"])

@@ -20,13 +20,13 @@ def dbt_profile_data(unique_schema):
         "test": {
             "outputs": {
                 "default": {
-                    "type": "postgres",
+                    "type": "cratedb",
                     "threads": 4,
                     "host": "localhost",
                     "port": 5432,
-                    "user": "root",
-                    "pass": "password",
-                    "dbname": "dbtMixedCase",
+                    "user": "crate",
+                    "pass": "",
+                    "dbname": "crate",
                     "schema": unique_schema,
                 },
             },
@@ -36,7 +36,7 @@ def dbt_profile_data(unique_schema):
 
 
 def test_basic(project_root, project):
-    assert project.database == "dbtMixedCase"
+    assert project.database == "crate"
 
     # Tests that a project with a single model works
     results = run_dbt(["run"])

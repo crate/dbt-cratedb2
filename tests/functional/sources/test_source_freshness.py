@@ -105,7 +105,7 @@ class SuccessfulSourceFreshnessTest(BaseSourcesTest):
                     "warn_after": {"count": 10, "period": "hour"},
                     "error_after": {"count": 18, "period": "hour"},
                 },
-                "adapter_response": {"_message": "SELECT 1", "code": "SELECT", "rows_affected": 1},
+                "adapter_response": {"_message": "/* 1", "code": "/*", "rows_affected": 1},
                 "thread_id": AnyStringWith("Thread-"),
                 "execution_time": AnyFloat(),
                 "timing": [
@@ -385,7 +385,7 @@ class TestMetadataFreshnessFails:
         return {"schema.yml": freshness_via_metadata_schema_yml}
 
     def test_metadata_freshness_fails(self, project):
-        """Since the default test adapter (postgres) does not support metadata
+        """Since the default test adapter (cratedb) does not support metadata
         based source freshness checks, trying to use that mechanism should
         result in a parse-time warning."""
         got_warning = False

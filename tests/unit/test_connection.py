@@ -10,7 +10,7 @@ from dbt.task.debug import DebugTask
 from dbt_common.exceptions import DbtConfigError
 from psycopg2 import DatabaseError, extensions as psycopg2_extensions
 
-from dbt.adapters.postgres import Plugin as PostgresPlugin, PostgresAdapter
+from dbt.adapters.cratedb import Plugin as PostgresPlugin, CrateDBAdapter
 from tests.unit.utils import (
     clear_plugin,
     config_from_parts_or_dicts,
@@ -22,13 +22,13 @@ from tests.unit.utils import (
 class TestPostgresConnection(TestCase):
     def setUp(self):
         self.target_dict = {
-            "type": "postgres",
-            "dbname": "postgres",
+            "type": "cratedb",
+            "dbname": "crate",
             "user": "root",
             "host": "thishostshouldnotexist",
             "pass": "password",
             "port": 5432,
-            "schema": "public",
+            "schema": "doc",
         }
 
         profile_cfg = {
@@ -55,7 +55,7 @@ class TestPostgresConnection(TestCase):
         self.handle = mock.MagicMock(spec=psycopg2_extensions.connection)
         self.cursor = self.handle.cursor.return_value
         self.mock_execute = self.cursor.execute
-        self.patcher = mock.patch("dbt.adapters.postgres.connections.psycopg2")
+        self.patcher = mock.patch("dbt.adapters.cratedb.connections.psycopg2")
         self.psycopg2 = self.patcher.start()
 
         # Create the Manifest.state_check patcher
@@ -75,7 +75,7 @@ class TestPostgresConnection(TestCase):
         self.mock_state_check.side_effect = _mock_state_check
 
         self.psycopg2.connect.return_value = self.handle
-        self.adapter = PostgresAdapter(self.config, self.mp_context)
+        self.adapter = CrateDBAdapter(self.config, self.mp_context)
         self.adapter.set_macro_resolver(load_internal_manifest_macros(self.config))
         self.adapter.set_macro_context_generator(generate_runtime_macro_context)
         self.adapter.connections.set_query_header(
@@ -97,19 +97,17 @@ class TestPostgresConnection(TestCase):
 
     def test_quoting_on_drop_schema(self):
         relation = self.adapter.Relation.create(
-            database="postgres",
+            database="crate",
             schema="test_schema",
             quote_policy=self.adapter.config.quoting,
         )
         self.adapter.drop_schema(relation)
 
-        self.mock_execute.assert_has_calls(
-            [mock.call('/* dbt */\ndrop schema if exists "test_schema"', None)]
-        )
+        self.mock_execute.assert_has_calls([mock.call("/* dbt */\n\n    SELECT 1", None)])
 
     def test_quoting_on_drop(self):
         relation = self.adapter.Relation.create(
-            database="postgres",
+            database="crate",
             schema="test_schema",
             identifier="test_table",
             type="table",
@@ -119,7 +117,7 @@ class TestPostgresConnection(TestCase):
         self.mock_execute.assert_has_calls(
             [
                 mock.call(
-                    '/* dbt */\ndrop table if exists "postgres"."test_schema".test_table',
+                    '/* dbt */\ndrop table if exists "crate"."test_schema".test_table',
                     None,
                 )
             ]
@@ -127,7 +125,7 @@ class TestPostgresConnection(TestCase):
 
     def test_quoting_on_truncate(self):
         relation = self.adapter.Relation.create(
-            database="postgres",
+            database="crate",
             schema="test_schema",
             identifier="test_table",
             type="table",
@@ -135,19 +133,19 @@ class TestPostgresConnection(TestCase):
         )
         self.adapter.truncate_relation(relation)
         self.mock_execute.assert_has_calls(
-            [mock.call('/* dbt */\ntruncate table "postgres"."test_schema".test_table', None)]
+            [mock.call('/* dbt */\ndelete from "crate"."test_schema".test_table', None)]
         )
 
     def test_quoting_on_rename(self):
         from_relation = self.adapter.Relation.create(
-            database="postgres",
+            database="crate",
             schema="test_schema",
             identifier="table_a",
             type="table",
             quote_policy=self.adapter.config.quoting,
         )
         to_relation = self.adapter.Relation.create(
-            database="postgres",
+            database="crate",
             schema="test_schema",
             identifier="table_b",
             type="table",
@@ -158,7 +156,7 @@ class TestPostgresConnection(TestCase):
         self.mock_execute.assert_has_calls(
             [
                 mock.call(
-                    '/* dbt */\nalter table "postgres"."test_schema".table_a rename to table_b',
+                    '/* dbt */\nalter table "crate"."test_schema".table_a rename to table_b',
                     None,
                 )
             ]
@@ -195,7 +193,7 @@ class TestPostgresConnection(TestCase):
 
     def test_dbname_verification_is_case_insensitive(self):
         # Override adapter settings from setUp()
-        self.target_dict["dbname"] = "Postgres"
+        self.target_dict["dbname"] = "crate"
         profile_cfg = {
             "outputs": {
                 "test": self.target_dict,
@@ -216,5 +214,5 @@ class TestPostgresConnection(TestCase):
         self.config = config_from_parts_or_dicts(project_cfg, profile_cfg)
         self.mp_context = get_context("spawn")
         self.adapter.cleanup_connections()
-        self._adapter = PostgresAdapter(self.config, self.mp_context)
-        self.adapter.verify_database("postgres")
+        self._adapter = CrateDBAdapter(self.config, self.mp_context)
+        self.adapter.verify_database("crate")

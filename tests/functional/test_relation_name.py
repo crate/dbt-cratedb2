@@ -19,7 +19,7 @@ select * from {{ this.schema }}.seed
 {{
   config({
     "unique_key": "col_A",
-    "materialized": "incremental"
+    "materialized": "incremental_cratedb"
     })
 }}
 """
@@ -45,6 +45,7 @@ class TestGeneratedDDLNameRules:
         )
         # length is 64
         self.over_max_length_filename = (
+            "my_name_is_one_over_max_length_chats_abcdefghijklmnopqrstuvwxyz1"
             "my_name_is_one_over_max_length_chats_abcdefghijklmnopqrstuvwxyz1"
         )
 
@@ -107,12 +108,13 @@ class TestGeneratedDDLNameRules:
             ],
         )
 
-    # 63 characters is the character limit for a table name in a postgres database
+    # 63 characters is the character limit for a table name in a cratedb database
     # (assuming compiled without changes from source)
-    def test_name_longer_than_63_does_not_build(self):
+    def test_name_longer_than_128_does_not_build(self):
         err_msg = (
-            "Relation name 'my_name_is_one_over_max"
-            "_length_chats_abcdefghijklmnopqrstuvwxyz1' is longer than 63 characters"
+            "Relation name 'my_name_is_one_over_max_length_chats_abcdefghijklmnopqrstuvwxyz1"
+            "my_name_is_one_over_max_length_chats_abcdefghijklmnopqrstuvwxyz1__dbt_tmp' "
+            "is longer than 128 characters"
         )
         res = run_dbt(
             [

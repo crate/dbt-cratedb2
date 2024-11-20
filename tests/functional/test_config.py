@@ -11,7 +11,7 @@ import dbt.tracking
 import pytest
 import yaml
 
-from dbt.adapters.postgres import PostgresCredentials
+from dbt.adapters.cratedb import CrateDBCredentials
 from tests.functional.utils import normalize
 
 
@@ -119,14 +119,14 @@ class BaseConfigTest(TestCase):
         self.default_profile_data = {
             "default": {
                 "outputs": {
-                    "postgres": {
-                        "type": "postgres",
-                        "host": "postgres-db-hostname",
+                    "cratedb": {
+                        "type": "cratedb",
+                        "host": "cratedb-db-hostname",
                         "port": 5555,
                         "user": "db_user",
                         "pass": "db_pass",
-                        "dbname": "postgres-db-name",
-                        "schema": "postgres-schema",
+                        "dbname": "cratedb-db-name",
+                        "schema": "cratedb-schema",
                         "threads": 7,
                     },
                     "with-vars": {
@@ -148,22 +148,22 @@ class BaseConfigTest(TestCase):
                         "schema": "{{ env_var('env_value_schema') }}",
                     },
                 },
-                "target": "postgres",
+                "target": "cratedb",
             },
             "other": {
                 "outputs": {
-                    "other-postgres": {
-                        "type": "postgres",
-                        "host": "other-postgres-db-hostname",
+                    "other-cratedb": {
+                        "type": "cratedb",
+                        "host": "other-cratedb-db-hostname",
                         "port": 4444,
                         "user": "other_db_user",
                         "pass": "other_db_pass",
-                        "dbname": "other-postgres-db-name",
-                        "schema": "other-postgres-schema",
+                        "dbname": "other-cratedb-db-name",
+                        "schema": "other-cratedb-schema",
                         "threads": 2,
                     }
                 },
-                "target": "other-postgres",
+                "target": "other-cratedb",
             },
             "empty_profile_data": {},
         }
@@ -179,13 +179,13 @@ class BaseConfigTest(TestCase):
             profile=None,
         )
         self.env_override = {
-            "env_value_type": "postgres",
-            "env_value_host": "env-postgres-host",
+            "env_value_type": "cratedb",
+            "env_value_host": "env-cratedb-host",
             "env_value_port": "6543",
-            "env_value_user": "env-postgres-user",
-            "env_value_pass": "env-postgres-pass",
-            "env_value_dbname": "env-postgres-dbname",
-            "env_value_schema": "env-postgres-schema",
+            "env_value_user": "env-cratedb-user",
+            "env_value_pass": "env-cratedb-pass",
+            "env_value_dbname": "env-cratedb-dbname",
+            "env_value_schema": "env-cratedb-schema",
             "env_value_profile": "default",
         }
 
@@ -240,49 +240,49 @@ class TestProfile(BaseConfigTest):
     def test_from_raw_profiles(self):
         profile = self.from_raw_profiles()
         self.assertEqual(profile.profile_name, "default")
-        self.assertEqual(profile.target_name, "postgres")
+        self.assertEqual(profile.target_name, "cratedb")
         self.assertEqual(profile.threads, 7)
-        self.assertTrue(isinstance(profile.credentials, PostgresCredentials))
-        self.assertEqual(profile.credentials.type, "postgres")
-        self.assertEqual(profile.credentials.host, "postgres-db-hostname")
+        self.assertTrue(isinstance(profile.credentials, CrateDBCredentials))
+        self.assertEqual(profile.credentials.type, "cratedb")
+        self.assertEqual(profile.credentials.host, "cratedb-db-hostname")
         self.assertEqual(profile.credentials.port, 5555)
         self.assertEqual(profile.credentials.user, "db_user")
         self.assertEqual(profile.credentials.password, "db_pass")
-        self.assertEqual(profile.credentials.schema, "postgres-schema")
-        self.assertEqual(profile.credentials.database, "postgres-db-name")
+        self.assertEqual(profile.credentials.schema, "cratedb-schema")
+        self.assertEqual(profile.credentials.database, "cratedb-db-name")
 
     def test_missing_type(self):
-        del self.default_profile_data["default"]["outputs"]["postgres"]["type"]
+        del self.default_profile_data["default"]["outputs"]["cratedb"]["type"]
         with self.assertRaises(dbt.exceptions.DbtProfileError) as exc:
             self.from_raw_profiles()
         self.assertIn("type", str(exc.exception))
-        self.assertIn("postgres", str(exc.exception))
+        self.assertIn("cratedb", str(exc.exception))
         self.assertIn("default", str(exc.exception))
 
     def test_bad_type(self):
-        self.default_profile_data["default"]["outputs"]["postgres"]["type"] = "invalid"
+        self.default_profile_data["default"]["outputs"]["cratedb"]["type"] = "invalid"
         with self.assertRaises(dbt.exceptions.DbtProfileError) as exc:
             self.from_raw_profiles()
         self.assertIn("Credentials", str(exc.exception))
-        self.assertIn("postgres", str(exc.exception))
+        self.assertIn("cratedb", str(exc.exception))
         self.assertIn("default", str(exc.exception))
 
     def test_invalid_credentials(self):
-        del self.default_profile_data["default"]["outputs"]["postgres"]["host"]
+        del self.default_profile_data["default"]["outputs"]["cratedb"]["host"]
         with self.assertRaises(dbt.exceptions.DbtProfileError) as exc:
             self.from_raw_profiles()
         self.assertIn("Credentials", str(exc.exception))
-        self.assertIn("postgres", str(exc.exception))
+        self.assertIn("cratedb", str(exc.exception))
         self.assertIn("default", str(exc.exception))
 
     def test_missing_target(self):
         profile = self.default_profile_data["default"]
         del profile["target"]
-        profile["outputs"]["default"] = profile["outputs"]["postgres"]
+        profile["outputs"]["default"] = profile["outputs"]["cratedb"]
         profile = self.from_raw_profiles()
         self.assertEqual(profile.profile_name, "default")
         self.assertEqual(profile.target_name, "default")
-        self.assertEqual(profile.credentials.type, "postgres")
+        self.assertEqual(profile.credentials.type, "cratedb")
 
 
 @pytest.mark.skip("Flags() has no attribute PROFILES_DIR")
@@ -314,16 +314,16 @@ class TestProfileFile(BaseConfigTest):
         profile = self.from_args()
         from_raw = self.from_raw_profile_info()
 
-        self.assertEqual(profile.target_name, "postgres")
+        self.assertEqual(profile.target_name, "cratedb")
         self.assertEqual(profile.threads, 3)
-        self.assertTrue(isinstance(profile.credentials, PostgresCredentials))
-        self.assertEqual(profile.credentials.type, "postgres")
-        self.assertEqual(profile.credentials.host, "postgres-db-hostname")
+        self.assertTrue(isinstance(profile.credentials, CrateDBCredentials))
+        self.assertEqual(profile.credentials.type, "cratedb")
+        self.assertEqual(profile.credentials.host, "cratedb-db-hostname")
         self.assertEqual(profile.credentials.port, 5555)
         self.assertEqual(profile.credentials.user, "db_user")
         self.assertEqual(profile.credentials.password, "db_pass")
-        self.assertEqual(profile.credentials.schema, "postgres-schema")
-        self.assertEqual(profile.credentials.database, "postgres-db-name")
+        self.assertEqual(profile.credentials.schema, "cratedb-schema")
+        self.assertEqual(profile.credentials.database, "cratedb-db-name")
         self.assertEqual(profile, from_raw)
 
     def test_profile_override(self):
@@ -336,16 +336,16 @@ class TestProfileFile(BaseConfigTest):
             threads_override=3,
         )
 
-        self.assertEqual(profile.target_name, "other-postgres")
+        self.assertEqual(profile.target_name, "other-cratedb")
         self.assertEqual(profile.threads, 3)
-        self.assertTrue(isinstance(profile.credentials, PostgresCredentials))
-        self.assertEqual(profile.credentials.type, "postgres")
-        self.assertEqual(profile.credentials.host, "other-postgres-db-hostname")
+        self.assertTrue(isinstance(profile.credentials, CrateDBCredentials))
+        self.assertEqual(profile.credentials.type, "cratedb")
+        self.assertEqual(profile.credentials.host, "other-cratedb-db-hostname")
         self.assertEqual(profile.credentials.port, 4444)
         self.assertEqual(profile.credentials.user, "other_db_user")
         self.assertEqual(profile.credentials.password, "other_db_pass")
-        self.assertEqual(profile.credentials.schema, "other-postgres-schema")
-        self.assertEqual(profile.credentials.database, "other-postgres-db-name")
+        self.assertEqual(profile.credentials.schema, "other-cratedb-schema")
+        self.assertEqual(profile.credentials.database, "other-cratedb-db-name")
         self.assertEqual(profile, from_raw)
 
     def test_env_vars(self):
@@ -357,11 +357,11 @@ class TestProfileFile(BaseConfigTest):
         self.assertEqual(profile.profile_name, "default")
         self.assertEqual(profile.target_name, "with-vars")
         self.assertEqual(profile.threads, 1)
-        self.assertEqual(profile.credentials.type, "postgres")
-        self.assertEqual(profile.credentials.host, "env-postgres-host")
+        self.assertEqual(profile.credentials.type, "cratedb")
+        self.assertEqual(profile.credentials.host, "env-cratedb-host")
         self.assertEqual(profile.credentials.port, 6543)
-        self.assertEqual(profile.credentials.user, "env-postgres-user")
-        self.assertEqual(profile.credentials.password, "env-postgres-pass")
+        self.assertEqual(profile.credentials.user, "env-cratedb-user")
+        self.assertEqual(profile.credentials.password, "env-cratedb-pass")
         self.assertEqual(profile, from_raw)
 
     def test_env_vars_env_target(self):
@@ -375,17 +375,17 @@ class TestProfileFile(BaseConfigTest):
         self.assertEqual(profile.profile_name, "default")
         self.assertEqual(profile.target_name, "with-vars")
         self.assertEqual(profile.threads, 1)
-        self.assertEqual(profile.credentials.type, "postgres")
-        self.assertEqual(profile.credentials.host, "env-postgres-host")
+        self.assertEqual(profile.credentials.type, "cratedb")
+        self.assertEqual(profile.credentials.host, "env-cratedb-host")
         self.assertEqual(profile.credentials.port, 6543)
-        self.assertEqual(profile.credentials.user, "env-postgres-user")
-        self.assertEqual(profile.credentials.password, "env-postgres-pass")
+        self.assertEqual(profile.credentials.user, "env-cratedb-user")
+        self.assertEqual(profile.credentials.password, "env-cratedb-pass")
         self.assertEqual(profile, from_raw)
 
     def test_cli_and_env_vars(self):
         self.args.target = "cli-and-env-vars"
-        self.args.vars = {"cli_value_host": "cli-postgres-host"}
-        renderer = dbt.config.renderer.ProfileRenderer({"cli_value_host": "cli-postgres-host"})
+        self.args.vars = {"cli_value_host": "cli-cratedb-host"}
+        renderer = dbt.config.renderer.ProfileRenderer({"cli_value_host": "cli-cratedb-host"})
         with mock.patch.dict(os.environ, self.env_override):
             profile = self.from_args(renderer=renderer)
             from_raw = self.from_raw_profile_info(
@@ -396,9 +396,9 @@ class TestProfileFile(BaseConfigTest):
         self.assertEqual(profile.profile_name, "default")
         self.assertEqual(profile.target_name, "cli-and-env-vars")
         self.assertEqual(profile.threads, 1)
-        self.assertEqual(profile.credentials.type, "postgres")
-        self.assertEqual(profile.credentials.host, "cli-postgres-host")
+        self.assertEqual(profile.credentials.type, "cratedb")
+        self.assertEqual(profile.credentials.host, "cli-cratedb-host")
         self.assertEqual(profile.credentials.port, 6543)
-        self.assertEqual(profile.credentials.user, "env-postgres-user")
-        self.assertEqual(profile.credentials.password, "env-postgres-pass")
+        self.assertEqual(profile.credentials.user, "env-cratedb-user")
+        self.assertEqual(profile.credentials.password, "env-cratedb-pass")
         self.assertEqual(profile, from_raw)

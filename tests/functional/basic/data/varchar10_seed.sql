@@ -1,9 +1,9 @@
 create table {schema}.seed (
-	id BIGSERIAL PRIMARY KEY,
+	id BIGINT PRIMARY KEY DEFAULT NOW(),
 	first_name VARCHAR(50),
 	last_name VARCHAR(50),
 	email VARCHAR(50),
-	"GenDEr" VARCHAR(10),
+	"GenDEr" VARCHAR(300),  -- TODO: CrateDB can't do `ALTER TABLE ... ALTER COLUMN ...`, see `varchar300_seed.sql`.
 	ip_address VARCHAR(20)
 );
 

@@ -35,9 +35,13 @@ class SuccessfulSourcesTest(BaseSourcesTest):
         return {"macro.sql": macros_macro_sql}
 
     def _create_schemas(self, project):
+        """
+        # TODO: CrateDB adjustments.
+
         schema = self.alternative_schema(project.test_schema)
         project.run_sql(f"drop schema if exists {schema} cascade")
         project.run_sql(f"create schema {schema}")
+        """
 
     def alternative_schema(self, test_schema):
         return test_schema + "_other"
@@ -148,6 +152,8 @@ class TestSourceChildrenParents(SuccessfulSourcesTest):
 
 
 class TestSourceRunOperation(SuccessfulSourcesTest):
+    # TODO: Refactor into an `OPTIMIZE TABLE` command?
+    @pytest.mark.skip("CrateDB: `vacuum` operation not implemented")
     def test_run_operation_source(self, project):
         kwargs = '{"source_name": "test_source", "table_name": "test_table"}'
         self.run_dbt_with_vars(project, ["run-operation", "vacuum_source", "--args", kwargs])

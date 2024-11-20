@@ -8,7 +8,7 @@ from dbt.adapters.contracts.relation import Path
 from dbt_common.context import set_invocation_context
 from dbt_common.exceptions import DbtValidationError
 
-from dbt.adapters.postgres import Plugin as PostgresPlugin, PostgresAdapter
+from dbt.adapters.cratedb import Plugin as PostgresPlugin, CrateDBAdapter
 from tests.unit.utils import (
     config_from_parts_or_dicts,
     inject_adapter,
@@ -28,9 +28,9 @@ class TestPostgresAdapter(TestCase):
         profile_cfg = {
             "outputs": {
                 "test": {
-                    "type": "postgres",
-                    "dbname": "postgres",
-                    "user": "root",
+                    "type": "cratedb",
+                    "dbname": "crate",
+                    "user": "crate",
                     "host": "thishostshouldnotexist",
                     "pass": "password",
                     "port": 5432,
@@ -47,11 +47,11 @@ class TestPostgresAdapter(TestCase):
     @property
     def adapter(self):
         if self._adapter is None:
-            self._adapter = PostgresAdapter(self.config, self.mp_context)
+            self._adapter = CrateDBAdapter(self.config, self.mp_context)
             inject_adapter(self._adapter, PostgresPlugin)
         return self._adapter
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_acquire_connection_validations(self, psycopg2):
         try:
             connection = self.adapter.acquire_connection("dummy")
@@ -59,13 +59,13 @@ class TestPostgresAdapter(TestCase):
             self.fail("got DbtValidationError: {}".format(str(e)))
         except BaseException as e:
             self.fail("acquiring connection failed with unknown exception: {}".format(str(e)))
-        self.assertEqual(connection.type, "postgres")
+        self.assertEqual(connection.type, "cratedb")
 
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once()
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_acquire_connection(self, psycopg2):
         connection = self.adapter.acquire_connection("dummy")
 
@@ -104,15 +104,15 @@ class TestPostgresAdapter(TestCase):
 
         master.handle.get_backend_pid.assert_not_called()
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_default_connect_timeout(self, psycopg2):
         connection = self.adapter.acquire_connection("dummy")
 
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once_with(
-            dbname="postgres",
-            user="root",
+            dbname="crate",
+            user="crate",
             host="thishostshouldnotexist",
             password="password",
             port=5432,
@@ -120,7 +120,7 @@ class TestPostgresAdapter(TestCase):
             application_name="dbt",
         )
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_changed_connect_timeout(self, psycopg2):
         self.config.credentials = self.config.credentials.replace(connect_timeout=30)
         connection = self.adapter.acquire_connection("dummy")
@@ -128,8 +128,8 @@ class TestPostgresAdapter(TestCase):
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once_with(
-            dbname="postgres",
-            user="root",
+            dbname="crate",
+            user="crate",
             host="thishostshouldnotexist",
             password="password",
             port=5432,
@@ -137,15 +137,15 @@ class TestPostgresAdapter(TestCase):
             application_name="dbt",
         )
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_default_keepalive(self, psycopg2):
         connection = self.adapter.acquire_connection("dummy")
 
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once_with(
-            dbname="postgres",
-            user="root",
+            dbname="crate",
+            user="crate",
             host="thishostshouldnotexist",
             password="password",
             port=5432,
@@ -153,7 +153,7 @@ class TestPostgresAdapter(TestCase):
             application_name="dbt",
         )
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_changed_keepalive(self, psycopg2):
         self.config.credentials = self.config.credentials.replace(keepalives_idle=256)
         connection = self.adapter.acquire_connection("dummy")
@@ -161,8 +161,8 @@ class TestPostgresAdapter(TestCase):
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once_with(
-            dbname="postgres",
-            user="root",
+            dbname="crate",
+            user="crate",
             host="thishostshouldnotexist",
             password="password",
             port=5432,
@@ -171,15 +171,15 @@ class TestPostgresAdapter(TestCase):
             application_name="dbt",
         )
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_default_application_name(self, psycopg2):
         connection = self.adapter.acquire_connection("dummy")
 
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once_with(
-            dbname="postgres",
-            user="root",
+            dbname="crate",
+            user="crate",
             host="thishostshouldnotexist",
             password="password",
             port=5432,
@@ -187,7 +187,7 @@ class TestPostgresAdapter(TestCase):
             application_name="dbt",
         )
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_changed_application_name(self, psycopg2):
         self.config.credentials = self.config.credentials.replace(application_name="myapp")
         connection = self.adapter.acquire_connection("dummy")
@@ -195,8 +195,8 @@ class TestPostgresAdapter(TestCase):
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once_with(
-            dbname="postgres",
-            user="root",
+            dbname="crate",
+            user="crate",
             host="thishostshouldnotexist",
             password="password",
             port=5432,
@@ -204,7 +204,7 @@ class TestPostgresAdapter(TestCase):
             application_name="myapp",
         )
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_role(self, psycopg2):
         self.config.credentials = self.config.credentials.replace(role="somerole")
         connection = self.adapter.acquire_connection("dummy")
@@ -213,7 +213,7 @@ class TestPostgresAdapter(TestCase):
 
         cursor.execute.assert_called_once_with("set role somerole")
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_search_path(self, psycopg2):
         self.config.credentials = self.config.credentials.replace(search_path="test")
         connection = self.adapter.acquire_connection("dummy")
@@ -221,8 +221,8 @@ class TestPostgresAdapter(TestCase):
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once_with(
-            dbname="postgres",
-            user="root",
+            dbname="crate",
+            user="crate",
             host="thishostshouldnotexist",
             password="password",
             port=5432,
@@ -231,7 +231,7 @@ class TestPostgresAdapter(TestCase):
             options="-c search_path=test",
         )
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_sslmode(self, psycopg2):
         self.config.credentials = self.config.credentials.replace(sslmode="require")
         connection = self.adapter.acquire_connection("dummy")
@@ -239,8 +239,8 @@ class TestPostgresAdapter(TestCase):
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once_with(
-            dbname="postgres",
-            user="root",
+            dbname="crate",
+            user="crate",
             host="thishostshouldnotexist",
             password="password",
             port=5432,
@@ -249,7 +249,7 @@ class TestPostgresAdapter(TestCase):
             application_name="dbt",
         )
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_ssl_parameters(self, psycopg2):
         self.config.credentials = self.config.credentials.replace(sslmode="verify-ca")
         self.config.credentials = self.config.credentials.replace(sslcert="service.crt")
@@ -260,8 +260,8 @@ class TestPostgresAdapter(TestCase):
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once_with(
-            dbname="postgres",
-            user="root",
+            dbname="crate",
+            user="crate",
             host="thishostshouldnotexist",
             password="password",
             port=5432,
@@ -273,7 +273,7 @@ class TestPostgresAdapter(TestCase):
             application_name="dbt",
         )
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_schema_with_space(self, psycopg2):
         self.config.credentials = self.config.credentials.replace(search_path="test test")
         connection = self.adapter.acquire_connection("dummy")
@@ -281,17 +281,17 @@ class TestPostgresAdapter(TestCase):
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once_with(
-            dbname="postgres",
-            user="root",
+            dbname="crate",
+            user="crate",
             host="thishostshouldnotexist",
             password="password",
             port=5432,
             connect_timeout=10,
             application_name="dbt",
-            options="-c search_path=test\ test",  # noqa: [W605]
+            options=r"-c search_path=test\ test",  # noqa: [W605]
         )
 
-    @mock.patch("dbt.adapters.postgres.connections.psycopg2")
+    @mock.patch("dbt.adapters.cratedb.connections.psycopg2")
     def test_set_zero_keepalive(self, psycopg2):
         self.config.credentials = self.config.credentials.replace(keepalives_idle=0)
         connection = self.adapter.acquire_connection("dummy")
@@ -299,8 +299,8 @@ class TestPostgresAdapter(TestCase):
         psycopg2.connect.assert_not_called()
         connection.handle
         psycopg2.connect.assert_called_once_with(
-            dbname="postgres",
-            user="root",
+            dbname="crate",
+            user="crate",
             host="thishostshouldnotexist",
             password="password",
             port=5432,
@@ -308,13 +308,13 @@ class TestPostgresAdapter(TestCase):
             application_name="dbt",
         )
 
-    @mock.patch.object(PostgresAdapter, "execute_macro")
-    @mock.patch.object(PostgresAdapter, "_get_catalog_relations")
+    @mock.patch.object(CrateDBAdapter, "execute_macro")
+    @mock.patch.object(CrateDBAdapter, "_get_catalog_relations")
     def test_get_catalog_various_schemas(self, mock_get_relations, mock_execute):
         self.catalog_test(mock_get_relations, mock_execute, False)
 
-    @mock.patch.object(PostgresAdapter, "execute_macro")
-    @mock.patch.object(PostgresAdapter, "_get_catalog_relations")
+    @mock.patch.object(CrateDBAdapter, "execute_macro")
+    @mock.patch.object(CrateDBAdapter, "_get_catalog_relations")
     def test_get_filtered_catalog(self, mock_get_relations, mock_execute):
         self.catalog_test(mock_get_relations, mock_execute, True)
 

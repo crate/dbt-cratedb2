@@ -44,7 +44,7 @@ GROUP BY
 
 class TestPostgresTestRefreshMaterializedView:
     """
-    this test addresses a issue in postgres around materialized views,
+    this test addresses a issue in cratedb around materialized views,
     and renaming against a model who has dependent models that are also materialized views
     related pr: https://github.com/dbt-labs/dbt-core/pull/9959
     """
