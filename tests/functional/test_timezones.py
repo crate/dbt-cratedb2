@@ -25,12 +25,12 @@ class TestTimezones:
             "test": {
                 "outputs": {
                     "dev": {
-                        "type": "postgres",
+                        "type": "cratedb",
                         "threads": 1,
                         "host": "localhost",
                         "port": int(os.getenv("POSTGRES_TEST_PORT", 5432)),
-                        "user": os.getenv("POSTGRES_TEST_USER", "root"),
-                        "pass": os.getenv("POSTGRES_TEST_PASS", "password"),
+                        "user": os.getenv("POSTGRES_TEST_USER", "crate"),
+                        "pass": os.getenv("POSTGRES_TEST_PASS", ""),
                         "dbname": os.getenv("POSTGRES_TEST_DATABASE", "dbt"),
                         "schema": unique_schema,
                     },

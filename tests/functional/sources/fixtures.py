@@ -156,7 +156,9 @@ select 1 as id
 models_descendant_model_sql = """select * from {{ source('test_source', 'test_table') }}
 """
 
-models_multi_source_model_sql = """select * from {{ source('test_source', 'other_test_table')}}
+# FIXME: CrateDB trips. See https://github.com/crate/crate/issues/16987.
+models_multi_source_model_sql = """select other_table.*, other_source_table.color
+  from {{ source('test_source', 'other_test_table')}}
   join {{ source('other_source', 'test_table')}} using (id)
 """
 

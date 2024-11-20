@@ -4,7 +4,7 @@ from dbt.adapters.contracts.connection import Connection, Identifier
 from dbt_common.helper_types import Port
 import psycopg2
 
-from dbt.adapters.postgres import PostgresCredentials, PostgresConnectionManager
+from dbt.adapters.cratedb import CrateDBCredentials, CrateDBConnectionManager
 
 
 class TestConnectionManagerOpen(TestCase):
@@ -18,7 +18,7 @@ class TestConnectionManagerOpen(TestCase):
         if connection := self.connection:
             pass
         else:
-            credentials = PostgresCredentials(
+            credentials = CrateDBCredentials(
                 host="localhost",
                 user="test-user",
                 port=Port(1111),
@@ -27,7 +27,7 @@ class TestConnectionManagerOpen(TestCase):
                 schema="test-schema",
                 retries=2,
             )
-            connection = Connection(Identifier("postgres"), None, credentials)
+            connection = Connection(Identifier("cratedb"), None, credentials)
         return connection
 
     def test_open(self):
@@ -53,7 +53,7 @@ class TestConnectionManagerOpen(TestCase):
             return True
 
         with mock.patch("psycopg2.connect", wraps=connect) as mock_connect:
-            PostgresConnectionManager.open(conn)
+            CrateDBConnectionManager.open(conn)
 
             assert mock_connect.call_count == 3
 

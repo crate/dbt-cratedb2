@@ -2,11 +2,11 @@ from typing import Dict, List, Optional
 
 from dbt.adapters.base.relation import BaseRelation
 
-from dbt.adapters.postgres.relation import PostgresRelation
+from dbt.adapters.cratedb.relation import CrateDBRelation
 
 
 def query_relation_type(project, relation: BaseRelation) -> Optional[str]:
-    assert isinstance(relation, PostgresRelation)
+    assert isinstance(relation, CrateDBRelation)
     sql = f"""
     select
         'table' as relation_type
@@ -36,7 +36,7 @@ def query_relation_type(project, relation: BaseRelation) -> Optional[str]:
 
 
 def query_indexes(project, relation: BaseRelation) -> List[Dict[str, str]]:
-    assert isinstance(relation, PostgresRelation)
+    assert isinstance(relation, CrateDBRelation)
     # pulled directly from `postgres__describe_indexes_template` and manually verified
     sql = f"""
         select

@@ -29,7 +29,7 @@ order by gender asc
 incremental_copy_sql = """
 {{
   config(
-    materialized = "incremental"
+    materialized = "incremental_cratedb"
   )
 }}
 

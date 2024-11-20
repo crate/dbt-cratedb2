@@ -9,7 +9,7 @@ from tests.functional.utils import run_dbt
 incremental_sql = """
 {{
   config(
-    materialized = "incremental"
+    materialized = "incremental_cratedb"
   )
 }}
 

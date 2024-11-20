@@ -3,8 +3,8 @@ from copy import deepcopy
 from dbt.adapters.contracts.relation import RelationType
 from dbt.adapters.relation_configs.config_change import RelationConfigChangeAction
 
-from dbt.adapters.postgres.relation import PostgresRelation
-from dbt.adapters.postgres.relation_configs import PostgresIndexConfig
+from dbt.adapters.cratedb.relation import CrateDBRelation
+from dbt.adapters.cratedb.relation_configs import PostgresIndexConfig
 
 
 def test_index_config_changes():
@@ -43,7 +43,7 @@ def test_index_config_changes():
         PostgresIndexConfig.from_dict(index) for index in [index_0_new, index_2_new, index_3_new]
     )
 
-    relation = PostgresRelation.create(
+    relation = CrateDBRelation.create(
         database="my_database",
         schema="my_schema",
         identifier="my_materialized_view",

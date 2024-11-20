@@ -13,11 +13,14 @@ def dbt_integration_project():
 @pytest.fixture(scope="class")
 def dbt_profile_target():
     return {
-        "type": "postgres",
+        "type": "cratedb",
         "host": os.getenv("POSTGRES_TEST_HOST", "localhost"),
         "port": int(os.getenv("POSTGRES_TEST_PORT", 5432)),
         "user": os.getenv("POSTGRES_TEST_USER", "crate"),
         "pass": os.getenv("POSTGRES_TEST_PASS", ""),
+        # FIXME: Well, this gets interpreted as catalog name by CrateDB.
+        #        For now, just accept it as c'est la vie?
+        #        For the future, let's revisit this again?
         "dbname": os.getenv("POSTGRES_TEST_DATABASE", "crate"),
         "threads": int(os.getenv("POSTGRES_TEST_THREADS", 4)),
     }

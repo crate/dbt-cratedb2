@@ -111,12 +111,12 @@ class TestSingularTestsEphemeral(BaseSingularTestsEphemeral):
     pass
 
 
-@pytest.mark.skip("Snapshots not implemented yet")
+@pytest.mark.skip("CrateDB: Snapshots not implemented yet")
 class TestSnapshotCheckCols(BaseSnapshotCheckCols):
     pass
 
 
-@pytest.mark.skip("Snapshots not implemented yet")
+@pytest.mark.skip("CrateDB: Snapshots not implemented yet")
 class TestSnapshotTimestamp(BaseSnapshotTimestamp):
     pass
 

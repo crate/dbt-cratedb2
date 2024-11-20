@@ -4,7 +4,7 @@ from unittest import TestCase
 import agate
 from dbt_common.clients import agate_helper
 
-from dbt.adapters.postgres import PostgresAdapter
+from dbt.adapters.cratedb import CrateDBAdapter
 
 
 class TestPostgresFilterCatalog(TestCase):
@@ -19,7 +19,7 @@ class TestPostgresFilterCatalog(TestCase):
         ]
         table = agate.Table(rows, column_names, agate_helper.DEFAULT_TYPE_TESTER)
 
-        result = PostgresAdapter._catalog_filter_table(table, used_schemas)
+        result = CrateDBAdapter._catalog_filter_table(table, used_schemas)
         assert len(result) == 3
         for row in result.rows:
             assert isinstance(row["table_schema"], str)

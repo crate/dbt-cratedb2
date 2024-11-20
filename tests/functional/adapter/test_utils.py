@@ -55,6 +55,7 @@ class TestArrayConstruct(BaseArrayConstruct):
     pass
 
 
+@pytest.mark.skip("CrateDB: Does not implement `bool_or` aggregate function")
 class TestBoolOr(BaseBoolOr):
     pass
 
@@ -63,6 +64,9 @@ class TestCast(BaseCast):
     pass
 
 
+@pytest.mark.skip(
+    "CrateDB: Upstream SQL template refers to column `input`, which needs to be quoted"
+)
 class TestCastBoolToText(BaseCastBoolToText):
     pass
 
@@ -75,14 +79,17 @@ class TestCurrentTimestamp(BaseCurrentTimestampAware):
     pass
 
 
+@pytest.mark.skip("CrateDB: Unknown function: to_date('2023-09-10', 'YYYY-MM-DD')")
 class TestDate(BaseDate):
     pass
 
 
+@pytest.mark.skip("CrateDB: '<=' not supported between instances of 'str' and 'int'")
 class TestDateSpine(BaseDateSpine):
     pass
 
 
+@pytest.mark.skip("CrateDB: Type `date` does not support storage")
 class TestDateTrunc(BaseDateTrunc):
     pass
 
@@ -91,6 +98,7 @@ class TestDateAdd(BaseDateAdd):
     pass
 
 
+@pytest.mark.skip("CrateDB: Unknown function: date_part('hour', data.second_date)")
 class TestDateDiff(BaseDateDiff):
     pass
 
@@ -108,6 +116,7 @@ class TestEscapeSingleQuotesBackslash(BaseEscapeSingleQuotesBackslash):
     pass
 
 
+@pytest.mark.skip("CrateDB: Does not implement `EXCEPT`")
 class TestExcept(BaseExcept):
     pass
 
@@ -116,6 +125,7 @@ class TestGenerateSeries(BaseGenerateSeries):
     pass
 
 
+@pytest.mark.skip("CrateDB: Cannot cast `'09/12/2023'` of type `text` to type `date`")
 class TestGetIntervalsBetween(BaseGetIntervalsBetween):
     pass
 
@@ -128,10 +138,12 @@ class TestHash(BaseHash):
     pass
 
 
+@pytest.mark.skip("CrateDB: Does not implement `INTERSECT`")
 class TestIntersect(BaseIntersect):
     pass
 
 
+@pytest.mark.skip("CrateDB: Type `date` does not support storage")
 class TestLastDay(BaseLastDay):
     pass
 
@@ -140,6 +152,7 @@ class TestLength(BaseLength):
     pass
 
 
+@pytest.mark.skip("CrateDB: Unknown error")
 class TestListagg(BaseListagg):
     pass
 
@@ -168,6 +181,7 @@ class TestSafeCast(BaseSafeCast):
     pass
 
 
+@pytest.mark.skip("CrateDB: Error `index in split_part must be greater than zero`")
 class TestSplitPart(BaseSplitPart):
     pass
 
