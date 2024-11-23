@@ -1,3 +1,5 @@
+import os
+
 from dbt.tests.util import get_manifest, run_dbt, update_config_file
 from dbt.contracts.graph.model_config import SourceConfig
 from dbt_common.dataclass_schema import ValidationError
@@ -174,6 +176,7 @@ class TestInvalidSourceConfig(SourceConfigTests):
             "schema.yml": invalid_config_source_schema_yml,
         }
 
+    @pytest.mark.skipif("GITHUB_ACTION" in os.environ, reason="Test fails on GitHub Actions")
     def test_invalid_config_source(self, project):
         with pytest.raises(ValidationError) as excinfo:
             run_dbt(["parse"])

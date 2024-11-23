@@ -23,6 +23,9 @@ from tests.functional.schema.fixtures.sql import (
 )
 
 
+pytest.skip("CrateDB: Cannot find data type: bigserial", allow_module_level=True)
+
+
 _CUSTOM_SCHEMA = "dbt_test"
 
 

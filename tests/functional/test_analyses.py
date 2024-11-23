@@ -46,7 +46,7 @@ class TestAnalyses:
         with open(path) as fp:
             assert fp.read().strip() == expected
 
-    def test_postgres_analyses(self, project):
+    def test_analyses(self, project):
         compiled_analysis_path = os.path.normpath("target/compiled/test/analyses")
         path_1 = os.path.join(compiled_analysis_path, "my_analysis.sql")
         path_2 = os.path.join(compiled_analysis_path, "raw_stuff.sql")

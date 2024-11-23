@@ -17,6 +17,7 @@ class TestBasicExposures:
             "metrics.yml": fixtures.metrics_schema_yml,
         }
 
+    @pytest.mark.skip("CrateDB: Unknown function: to_date('02/20/2023', 'mm/dd/yyyy')")
     def test_names_with_spaces(self, project):
         run_dbt(["run"])
         manifest = get_manifest(project.project_root)
@@ -28,6 +29,7 @@ class TestBasicExposures:
         assert exposure_ids == expected_exposure_ids
         assert manifest.exposures["exposure.test.simple_exposure"].label == "simple exposure label"
 
+    @pytest.mark.skip("CrateDB: Unknown function: to_date('02/20/2023', 'mm/dd/yyyy')")
     def test_depends_on(self, project):
         run_dbt(["run"])
         manifest = get_manifest(project.project_root)

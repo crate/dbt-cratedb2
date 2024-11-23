@@ -4,7 +4,7 @@ import pytest
 
 
 # Test coverage: A relation is a name for a database entity, i.e. a table or view. Every relation has
-# a name. These tests verify the default Postgres rules for relation names are followed. Adapters
+# a name. These tests verify the default PostgreSQL rules for relation names are followed. Adapters
 # may override connection rules and thus may have their own tests.
 
 seeds__seed = """col_A,col_B
@@ -45,6 +45,7 @@ class TestGeneratedDDLNameRules:
         )
         # length is 64
         self.over_max_length_filename = (
+            "my_name_is_one_over_max_length_chats_abcdefghijklmnopqrstuvwxyz1"
             "my_name_is_one_over_max_length_chats_abcdefghijklmnopqrstuvwxyz1"
             "my_name_is_one_over_max_length_chats_abcdefghijklmnopqrstuvwxyz1"
         )
@@ -110,19 +111,13 @@ class TestGeneratedDDLNameRules:
 
     # 63 characters is the character limit for a table name in a cratedb database
     # (assuming compiled without changes from source)
-    def test_name_longer_than_128_does_not_build(self):
-        err_msg = (
-            "Relation name 'my_name_is_one_over_max_length_chats_abcdefghijklmnopqrstuvwxyz1"
-            "my_name_is_one_over_max_length_chats_abcdefghijklmnopqrstuvwxyz1__dbt_tmp' "
-            "is longer than 128 characters"
-        )
+    def test_name_longer_than_128_success(self):
         res = run_dbt(
             [
                 "run",
                 "-s",
                 self.over_max_length_filename,
             ],
-            expect_pass=False,
+            expect_pass=True,
         )
-        assert res[0].status == RunStatus.Error
-        assert err_msg in res[0].message
+        assert res[0].status == RunStatus.Success

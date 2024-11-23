@@ -18,6 +18,7 @@ SELECT 1 AS foo, 2 AS bar
 """
 
 
+@pytest.mark.skip("CrateDB: MATERIALIZED VIEW not supported")
 class TestUnrestrictedPackageAccess:
     @pytest.fixture(scope="class")
     def models(self):

@@ -127,7 +127,7 @@ class CrateDBAdapter(PostgresAdapter):
         columns: the number of rows that are different between the two
         relations and the number of mismatched rows.
 
-        FIXME: CrateDB does not support the EXCEPT operation.
+        FIXME: CrateDB: `EXCEPT` not supported.
         """
         # This method only really exists for test reasons.
         return COLUMNS_EQUAL_SQL
@@ -139,6 +139,8 @@ class CrateDBAdapter(PostgresAdapter):
         stmt = SQLStatement(sql)
         cursor = conn.handle.cursor()
         try:
+            # CrateDB: This is a good spot for tracing SQL statements.
+            # print("SQL:", sql)
             cursor.execute(sql)
             if stmt.is_dml:
                 for table in stmt.tables:

@@ -1,6 +1,9 @@
 import pytest
 from dbt.tests.util import run_dbt
 
+pytest.skip("CrateDB: Type `date` does not support storage", allow_module_level=True)
+
+
 SEED = """
 order_id,customer_id,total_amount,order_date
 1,101,50.00,2024-04-01

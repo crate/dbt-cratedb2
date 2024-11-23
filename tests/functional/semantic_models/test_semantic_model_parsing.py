@@ -33,9 +33,10 @@ class TestSemanticModelParsing:
         assert len(manifest.semantic_models) == 1
         semantic_model = manifest.semantic_models["semantic_model.test.revenue"]
         assert semantic_model.node_relation.alias == "fct_revenue"
+        # TODO: Adjustment for CrateDB.
         assert (
             semantic_model.node_relation.relation_name
-            == f'"dbt"."{project.test_schema}"."fct_revenue"'
+            == f'"crate"."{project.test_schema}"."fct_revenue"'
         )
         assert len(semantic_model.measures) == 6
         # manifest should have one metric (that was created from a measure)

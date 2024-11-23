@@ -92,6 +92,7 @@ class TestDefaultSelectors:
         assert len(result) == 1
         assert result.results[0].node.name == "model_a"
 
+    @pytest.mark.skip('CrateDB: "_loaded_at" conflicts with system column pattern')
     def test_source__freshness(self, project):
         run_dbt(["seed", "-s", "test.model_c"])
         result = run_dbt(["source", "freshness"])

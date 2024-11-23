@@ -26,18 +26,22 @@ models:
 """
 
 
+@pytest.mark.skip("CrateDB: COMMENT on column not supported")
 class TestPersistDocs(BasePersistDocs):
     pass
 
 
+@pytest.mark.skip("CrateDB: COMMENT on column not supported")
 class TestPersistDocsColumnMissing(BasePersistDocsColumnMissing):
     pass
 
 
+@pytest.mark.skip("CrateDB: COMMENT on column not supported")
 class TestPersistDocsCommentOnQuotedColumn(BasePersistDocsCommentOnQuotedColumn):
     pass
 
 
+@pytest.mark.skip("CrateDB: MATERIALIZED VIEW not supported")
 class TestPersistDocsWithMaterializedView(BasePersistDocs):
     @pytest.fixture(scope="class", autouse=True)
     def seeds(self):

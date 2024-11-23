@@ -164,12 +164,14 @@ class TestShowModelVersions:
     def seeds(self):
         return {"sample_seed.csv": seeds__sample_seed}
 
+    @pytest.mark.skip("CrateDB: Cannot find data type: bool")
     def test_version_unspecified(self, project):
         run_dbt(["build"])
         (results, log_output) = run_dbt_and_capture(["show", "--select", "sample_model"])
         assert "Previewing node 'sample_model.v1'" in log_output
         assert "Previewing node 'sample_model.v2'" in log_output
 
+    @pytest.mark.skip("CrateDB: Cannot find data type: bool")
     def test_none(self, project):
         run_dbt(["build"])
         (results, log_output) = run_dbt_and_capture(["show", "--select", "sample_model.v2"])
@@ -189,6 +191,7 @@ class TestShowPrivateModel:
     def seeds(self):
         return {"sample_seed.csv": seeds__sample_seed}
 
+    @pytest.mark.skip("CrateDB: Cannot find data type: bool")
     def test_version_unspecified(self, project):
         run_dbt(["build"])
         run_dbt(["show", "--inline", "select * from {{ ref('private_model') }}"])

@@ -46,6 +46,8 @@ class CrateDBConnectionManager(SQLConnectionManager):
     @contextmanager
     def exception_handler(self, sql):
         try:
+            # CrateDB: This is a good spot for tracing SQL statements.
+            # print("SQL:", sql)
             yield
             # CrateDB needs write synchronization after DML operations.
             # TODO: Only enable optionally?

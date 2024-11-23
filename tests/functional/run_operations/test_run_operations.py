@@ -38,9 +38,9 @@ class TestOperations:
                         "threads": 4,
                         "host": "localhost",
                         "port": int(os.getenv("POSTGRES_TEST_PORT", 5432)),
-                        "user": os.getenv("POSTGRES_TEST_USER", "root"),
+                        "user": os.getenv("POSTGRES_TEST_USER", "crate"),
                         "pass": os.getenv("POSTGRES_TEST_PASS", "password"),
-                        "dbname": os.getenv("POSTGRES_TEST_DATABASE", "dbt"),
+                        "dbname": os.getenv("POSTGRES_TEST_DATABASE", "crate"),
                         "schema": unique_schema,
                     },
                     "noaccess": {
@@ -50,7 +50,7 @@ class TestOperations:
                         "port": int(os.getenv("POSTGRES_TEST_PORT", 5432)),
                         "user": "noaccess",
                         "pass": "password",
-                        "dbname": os.getenv("POSTGRES_TEST_DATABASE", "dbt"),
+                        "dbname": os.getenv("POSTGRES_TEST_DATABASE", "crate"),
                         "schema": unique_schema,
                     },
                 },
@@ -88,14 +88,14 @@ class TestOperations:
         self.run_operation("no_args", extra_args=["--target", "noaccess"], expect_pass=False)
 
     # TODO: Refactor into an `OPTIMIZE TABLE` command?
-    @pytest.mark.skip("CrateDB does not provide the `vacuum` operation")
+    @pytest.mark.skip("CrateDB: `VACUUM` operation not supported")
     def test_vacuum(self, project):
         run_dbt(["run"])
         # this should succeed
         self.run_operation("vacuum", table_name="model")
 
     # TODO: Refactor into an `OPTIMIZE TABLE` command?
-    @pytest.mark.skip("CrateDB does not provide the `vacuum` operation")
+    @pytest.mark.skip("CrateDB: `VACUUM` operation not supported")
     def test_vacuum_ref(self, project):
         run_dbt(["run"])
         # this should succeed

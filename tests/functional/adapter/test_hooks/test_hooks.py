@@ -59,7 +59,7 @@ class BasePrePostModelHooksCrateDB(BasePrePostModelHooks):
     @pytest.fixture(scope="class")
     def project_config_update(self):
         """
-        CrateDB does not implement `VACUUM`.
+        CrateDB: `VACUUM` not supported.
         """
         return {
             "models": {

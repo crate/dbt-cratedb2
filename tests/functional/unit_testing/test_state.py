@@ -14,6 +14,8 @@ from tests.functional.unit_testing.fixtures import (
     test_my_model_simple_fixture_yml,
 )
 
+pytest.skip("CrateDB: Type `date` does not support storage", allow_module_level=True)
+
 
 class UnitTestState:
     @pytest.fixture(scope="class")
