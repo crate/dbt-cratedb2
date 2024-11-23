@@ -108,6 +108,7 @@ class TestIncrementalSchemaChange:
         self.run_incremental_append_new_columns(project)
         self.run_incremental_append_new_columns_remove_one(project)
 
+    @pytest.mark.skip("CrateDB: mismatched input 'drop' expecting 'ADD'")
     def test_run_incremental_sync_all_columns(self, project):
         self.run_incremental_sync_all_columns(project)
         self.run_incremental_sync_remove_only(project)

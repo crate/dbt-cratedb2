@@ -28,7 +28,7 @@ models__model_sql = """
 {% if execute %}
     {# don't ever do any of this #}
 
-    {# FIXME: CrateDB does not understand `DROP SCHEMA` yet #}
+    {# FIXME: CrateDB: `DROP SCHEMA` not supported #}
     {%- do adapter.drop_schema(upstream) -%}
 
     {# FIXME: CrateDB workaround #}

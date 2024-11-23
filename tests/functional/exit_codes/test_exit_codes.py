@@ -53,6 +53,7 @@ class TestExitCodes(BaseConfigProject):
         results = run_dbt(["compile"])
         assert len(results) == 7
 
+    @pytest.mark.skip("CrateDB: Type `date` does not support storage")
     def test_snapshot_pass(self, project):
         run_dbt(["run", "--model", "good"])
         results = run_dbt(["snapshot"])

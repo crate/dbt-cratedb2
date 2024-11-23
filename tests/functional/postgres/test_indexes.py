@@ -14,6 +14,8 @@ from tests.functional.postgres.fixtures import (
 )
 from tests.functional.utils import run_dbt, run_dbt_and_capture
 
+pytest.skip("CrateDB: no viable alternative at input 'create  index'", allow_module_level=True)
+
 
 INDEX_DEFINITION_PATTERN = re.compile(r"using\s+(\w+)\s+\((.+)\)\Z")
 

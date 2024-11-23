@@ -1,5 +1,9 @@
 # dbt-cratedb2 backlog
 
+## Core
+- Make write synchronization only optional?
+- Use psycopg3?
+
 ## Bugs?
 - [o] 'Database Error\n  Validation Failed: 1: this action would add [4] total shards, but this cluster currently has [1000]/[1000] maximum shards open;
    ```

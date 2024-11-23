@@ -4,6 +4,11 @@ import pytest
 
 from tests.functional.projects import GraphSelection
 
+pytest.skip(
+    'CrateDB: Relation name "test1732.alternative.users__dbt_tmp" is invalid',
+    allow_module_level=True,
+)
+
 
 def run_schema_and_assert(project, include, exclude, expected_tests):
     # deps must run before seed

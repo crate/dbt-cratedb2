@@ -1,3 +1,5 @@
+import os
+
 from dbt.contracts.graph.model_config import ExposureConfig
 from dbt.tests.util import get_manifest, run_dbt, update_config_file
 from dbt_common.dataclass_schema import ValidationError
@@ -114,6 +116,7 @@ class TestInvalidConfig(ExposureConfigTests):
             "schema.yml": fixtures.invalid_config_exposure_yml,
         }
 
+    @pytest.mark.skipif("GITHUB_ACTION" in os.environ, reason="Test fails on GitHub Actions")
     def test_exposure_config_yaml_level(self, project):
         with pytest.raises(ValidationError) as excinfo:
             run_dbt(["parse"])

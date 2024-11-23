@@ -42,11 +42,11 @@ class BaseDebugProfileVariable(BaseDebug):
         return {"config-version": 2, "profile": '{{ "te" ~ "st" }}'}
 
 
-class TestDebugPostgres(BaseDebug):
+class TestDebug(BaseDebug):
     def test_ok(self, project):
         result, log = run_dbt_and_capture(["debug"])
         assert "ERROR" not in log
 
 
-class TestDebugProfileVariablePostgres(BaseDebugProfileVariable):
+class TestDebugProfileVariable(BaseDebugProfileVariable):
     pass

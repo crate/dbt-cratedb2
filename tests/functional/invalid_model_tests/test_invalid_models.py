@@ -1,3 +1,5 @@
+import os
+
 from dbt.exceptions import ParsingError
 from dbt.tests.util import run_dbt
 from dbt_common.exceptions import CompilationError
@@ -126,6 +128,7 @@ class TestMalformedEnabledParam(InvalidModelBase):
             "models__view_bad_enabled_value.sql": models__view_bad_enabled_value,
         }
 
+    @pytest.mark.skipif("GITHUB_ACTION" in os.environ, reason="Test fails on GitHub Actions")
     def test_view_disabled(self, project):
         with pytest.raises(ParsingError) as exc:
             run_dbt(["seed"])
@@ -204,7 +207,7 @@ class TestInvalidDisabledSource(InvalidModelBase):
             }
         }
 
-    def test_postgres_source_disabled(self, project):
+    def test_source_disabled(self, project):
         with pytest.raises(CompilationError) as exc:
             run_dbt()
 

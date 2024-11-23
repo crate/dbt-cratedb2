@@ -29,6 +29,7 @@ class TestUnitTests:
     def project_config_update(self):
         return {"vars": {"my_test": "my_test_var"}}
 
+    @pytest.mark.skip("CrateDB: Type `date` does not support storage")
     def test_basic(self, project):
         results = run_dbt(["run"])
         assert len(results) == 3
@@ -95,6 +96,7 @@ class TestUnitTestIncrementalModel:
             "test_my_incremental_model.yml": test_my_model_incremental_yml,
         }
 
+    @pytest.mark.skip("CrateDB: Type `date` does not support storage")
     def test_basic(self, project):
         results = run_dbt(["run"])
         assert len(results) == 2

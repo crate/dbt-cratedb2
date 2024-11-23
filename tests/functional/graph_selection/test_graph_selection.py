@@ -6,6 +6,11 @@ import pytest
 
 from tests.functional.projects import GraphSelection
 
+pytest.skip(
+    'CrateDB: Relation name "test1732.alternative.users__dbt_tmp" is invalid',
+    allow_module_level=True,
+)
+
 
 selectors_yml = """
 selectors:

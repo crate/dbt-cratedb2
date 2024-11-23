@@ -39,7 +39,7 @@ class TestStatements:
             "seed-paths": ["seed"],
         }
 
-    def test_postgres_statements(self, project):
+    def test_statements(self, project):
         results = run_dbt(["seed"])
         assert len(results) == 2
         results = run_dbt(["run", "-m", "statement_actual"])

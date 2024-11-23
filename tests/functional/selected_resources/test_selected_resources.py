@@ -8,6 +8,11 @@ from tests.functional.selected_resources.fixtures import (
     on_run_start_macro_assert_selected_models_expected_list,
 )
 
+pytest.skip(
+    "CrateDB: `UPDATE ... FROM ...` not supported, see https://github.com/crate/crate/issues/15204",
+    allow_module_level=True,
+)
+
 
 @pytest.fixture(scope="class")
 def macros():

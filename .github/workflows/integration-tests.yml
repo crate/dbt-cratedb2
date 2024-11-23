@@ -92,7 +92,7 @@ jobs:
           - 4200:4200
           - 5432:5432
         env:
-          CRATE_HEAP_SIZE: 4g
+          CRATE_HEAP_SIZE: 8g
 
     steps:
       - name: Check out repository
@@ -128,6 +128,11 @@ jobs:
         uses: dbt-labs/dbt-adapters/.github/actions/setup-hatch@main
         with:
           python-version: ${{ matrix.python-version }}
+
+      - name: Configure CrateDB
+        run: |
+          pip install crash
+          crash -c "SET GLOBAL PERSISTENT cluster.max_shards_per_node = 5000;"
 
       - name: Run integration tests
         run: hatch run integration-tests

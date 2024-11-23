@@ -11,7 +11,7 @@
 {% endmacro %}
 
 
-{# Needs an override because CrateDB does not support `CREATE TEMPORARY TABLE` #}
+{# Needs an override because CrateDB lacks support for `CREATE TEMPORARY TABLE` #}
 {% macro cratedb__create_table_as(temporary, relation, sql) -%}
   {%- set unlogged = config.get('unlogged', default=false) -%}
   {%- set sql_header = config.get('sql_header', none) -%}
@@ -61,7 +61,7 @@
 {% endmacro %}
 
 
-{# CrateDB: Does not support `COMMENT ON` statements. #}
+{# CrateDB: `COMMENT ON` not supported. #}
 {% macro cratedb__alter_relation_comment(relation, comment) %}
   {% set escaped_comment = postgres_escape_comment(comment) %}
   {% if relation.type == 'materialized_view' -%}
@@ -74,7 +74,7 @@
 {% endmacro %}
 
 
-{# CrateDB: Does not support `COMMENT ON` statements. #}
+{# CrateDB: `COMMENT ON` not supported. #}
 {% macro cratedb__alter_column_comment(relation, column_dict) %}
   {% set existing_columns = adapter.get_columns_in_relation(relation) | map(attribute="name") | list %}
   {% for column_name in column_dict if (column_name in existing_columns) %}

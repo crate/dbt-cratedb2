@@ -14,6 +14,8 @@ import pytest
 
 from utils import query_indexes, query_relation_type
 
+pytest.skip("CrateDB: MATERIALIZED VIEW not supported", allow_module_level=True)
+
 
 MY_MATERIALIZED_VIEW = """
 {{ config(
