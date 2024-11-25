@@ -10,7 +10,6 @@
   {{ return(cratedb__create_table_as(False, relation, sql)) }}
 {% endmacro %}
 
-
 {# Needs an override because CrateDB lacks support for `CREATE TEMPORARY TABLE` #}
 {% macro cratedb__create_table_as(temporary, relation, sql) -%}
   {%- set unlogged = config.get('unlogged', default=false) -%}
@@ -39,6 +38,18 @@
     {{ sql }}
   );
 {%- endmacro %}
+
+{% macro cratedb__drop_relation(relation) -%}
+  {% call statement('drop_relation', auto_begin=False) -%}
+    drop {{ relation.type }} if exists {{ relation.render() }}
+  {%- endcall %}
+{% endmacro %}
+
+{% macro cratedb__truncate_relation(relation) -%}
+  {% call statement('truncate_relation') -%}
+    delete from {{ relation }}
+  {%- endcall %}
+{% endmacro %}
 
 {% macro cratedb__create_schema(relation) -%}
   {% if relation.database -%}
@@ -72,7 +83,6 @@
   {# comment on {{ relation_type }} {{ relation }} is {{ escaped_comment }}; #}
   SELECT 1;
 {% endmacro %}
-
 
 {# CrateDB: `COMMENT ON` not supported. #}
 {% macro cratedb__alter_column_comment(relation, column_dict) %}
