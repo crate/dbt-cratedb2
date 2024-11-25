@@ -12,14 +12,4 @@
   {{ return(load_result('relations').table) }}
 {% endmacro %}
 
-{% macro cratedb__drop_relation(relation) -%}
-  {% call statement('drop_relation', auto_begin=False) -%}
-    drop {{ relation.type }} if exists {{ relation.render() }}
-  {%- endcall %}
-{% endmacro %}
-
-{% macro cratedb__truncate_relation(relation) -%}
-  {% call statement('truncate_relation') -%}
-    delete from {{ relation }}
-  {%- endcall %}
 {% endmacro %}
