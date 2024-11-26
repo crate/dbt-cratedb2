@@ -23,20 +23,13 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "psycopg2-binary>=2.9,<3.0",
-    "dbt-adapters>=1.7.0,<2.0",
-    # add dbt-core to ensure backwards compatibility of installation, this is not a functional dependency
-    "dbt-core>=1.9.0b4",
-    # installed via dbt-adapters but used directly
-    "dbt-common>=1.0.4,<2.0",
-    "dbt-postgres>=1.9.0b1",
-    "agate>=1.0,<2.0",
+    "dbt-postgres>=1.9.0.b1",
     "sqlparse<0.6",
     "sql-metadata<3",
 ]
 [project.urls]
 Homepage = "https://github.com/crate-workbench/dbt-cratedb2"
-Documentation = "https://dbt-cratedb2.readthedocs.io/"
+Documentation = "https://github.com/crate-workbench/dbt-cratedb2/"
 Repository = "https://github.com/crate-workbench/dbt-cratedb2.git"
 Issues = "https://github.com/crate-workbench/dbt-cratedb2/issues"
 Changelog = "https://github.com/crate-workbench/dbt-cratedb2/blob/main/CHANGELOG.md"
