@@ -34,7 +34,7 @@ dbt is the T in ELT. Organize, cleanse, denormalize, filter, rename, and pre-agg
 ## Installation
 Install dbt-cratedb2.
 ```shell
-pip install 'dbt-cratedb2 @ git+https://github.com/crate-workbench/dbt-cratedb2.git'
+pip install --upgrade 'dbt-cratedb2'
 ```
 
 ### `psycopg2-binary` vs. `psycopg2`
