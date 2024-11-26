@@ -34,4 +34,4 @@ HEALTHCHECK CMD dbt --version || exit 1
 WORKDIR /usr/app/dbt/
 ENTRYPOINT ["dbt"]
 
-RUN python -m pip install --no-cache-dir "dbt-cratedb2 @ git+https://github.com/crate-workbench/dbt-cratedb2@${commit_ref}"
+RUN python -m pip install --no-cache-dir "dbt-cratedb2 @ git+https://github.com/crate/dbt-cratedb2@${commit_ref}"

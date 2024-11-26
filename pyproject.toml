@@ -28,11 +28,11 @@ dependencies = [
     "sql-metadata<3",
 ]
 [project.urls]
-Homepage = "https://github.com/crate-workbench/dbt-cratedb2"
-Documentation = "https://github.com/crate-workbench/dbt-cratedb2/"
-Repository = "https://github.com/crate-workbench/dbt-cratedb2.git"
-Issues = "https://github.com/crate-workbench/dbt-cratedb2/issues"
-Changelog = "https://github.com/crate-workbench/dbt-cratedb2/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/crate/dbt-cratedb2"
+Documentation = "https://github.com/crate/dbt-cratedb2/"
+Repository = "https://github.com/crate/dbt-cratedb2.git"
+Issues = "https://github.com/crate/dbt-cratedb2/issues"
+Changelog = "https://github.com/crate/dbt-cratedb2/blob/main/CHANGELOG.md"
 
 [build-system]
 requires = ["hatchling"]

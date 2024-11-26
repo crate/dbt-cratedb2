@@ -23,7 +23,7 @@ resolves #
 
 ### Checklist
 
-- [ ] I have read [the contributing guide](https://github.com/crate-workbench/dbt-cratedb2/blob/main/CONTRIBUTING.md) and understand what's expected of me
+- [ ] I have read [the contributing guide](https://github.com/crate/dbt-cratedb2/blob/main/CONTRIBUTING.md) and understand what's expected of me
 - [ ] I have run this code in development and it appears to resolve the stated issue
 - [ ] This PR includes tests, or tests are not required/relevant for this PR
 - [ ] This PR has no interface changes (e.g. macros, cli, logs, json artifacts, config files, adapter interface, etc) or this PR has already received feedback and approval from Product or DX

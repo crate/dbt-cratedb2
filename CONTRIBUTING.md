@@ -42,23 +42,23 @@ Contributors external to the `crate` GitHub organization can contribute to `dbt-
 by forking the `dbt-cratedb2` repository. For more on forking, check out the
 [GitHub docs on forking](https://help.github.com/en/articles/fork-a-repo). To contribute:
 
-1. Fork the `crate-workbench/dbt-cratedb2` repository (e.g. `{forked-org}/dbt-cratedb2`)
+1. Fork the `crate/dbt-cratedb2` repository (e.g. `{forked-org}/dbt-cratedb2`)
 2. Clone `{forked-org}/dbt-cratedb2` locally
 3. Check out a new branch locally
 4. Make changes in the new branch
 5. Push the new branch to `{forked-org}/dbt-cratedb2`
-6. Open a pull request in `crate-workbench/dbt-cratedb2` to merge `{forked-org}/dbt-cratedb2/{new-branch}` into `main`
+6. Open a pull request in `crate/dbt-cratedb2` to merge `{forked-org}/dbt-cratedb2/{new-branch}` into `main`
 
 ### CrateDB contributors
 
 Contributors in the `crate` GitHub organization have push access to the `dbt-cratedb2` repo.
-Rather than forking `crate-workbench/dbt-cratedb2`, use `crate-workbench/dbt-cratedb2` directly. To contribute:
+Rather than forking `crate/dbt-cratedb2`, use `crate/dbt-cratedb2` directly. To contribute:
 
-1. Clone `crate-workbench/dbt-cratedb2` locally
+1. Clone `crate/dbt-cratedb2` locally
 2. Check out a new branch locally
 3. Make changes in the new branch
-4. Push the new branch to `crate-workbench/dbt-cratedb2`
-5. Open a pull request in `crate-workbench/dbt-cratedb2` to merge `{new-branch}` into `main`
+4. Push the new branch to `crate/dbt-cratedb2`
+5. Open a pull request in `crate/dbt-cratedb2` to merge `{new-branch}` into `main`
 
 
 ## Developing
@@ -92,8 +92,8 @@ will be reflected in the virtual environment immediately.
 
 ## Testing
 
-`dbt-cratedb2` contains [code quality checks](https://github.com/crate-workbench/dbt-cratedb2/tree/main/.pre-commit-config.yaml), [unit tests](https://github.com/crate-workbench/dbt-cratedb2/tree/main/tests/unit),
-and [functional tests](https://github.com/crate-workbench/dbt-cratedb2/tree/main/tests/functional).
+`dbt-cratedb2` contains [code quality checks](https://github.com/crate/dbt-cratedb2/tree/main/.pre-commit-config.yaml), [unit tests](https://github.com/crate/dbt-cratedb2/tree/main/tests/unit),
+and [functional tests](https://github.com/crate/dbt-cratedb2/tree/main/tests/functional).
 
 ### Code quality
 
