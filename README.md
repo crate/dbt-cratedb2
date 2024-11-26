@@ -1,5 +1,7 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/dbt-labs/dbt/ec7dee39f793aa4f7dd3dae37282cc87664813e4/etc/dbt-logo-full.svg" alt="dbt logo" width="500"/>
+  <br/><br/>
+  <img src="https://github.com/user-attachments/assets/70485bb9-9809-46ce-a189-858676780b2b" alt="dbt logo" width="500"/>
 </p>
 <p align="center">
   <a href="https://github.com/crate-workbench/dbt-cratedb2/actions/workflows/unit-tests.yml">
@@ -15,10 +17,10 @@
 The `dbt-cratedb2` package contains all the code enabling [dbt] to work with a
 [CrateDB] database.
 
-Because CrateDB is PostgreSQL-compatible, dbt-cratedb2
+CrateDB is PostgreSQL-compatible, that's why dbt-cratedb2
 heavily builds upon the canonical [dbt-postgres] adapter.
 For more information on using dbt with CrateDB,
-consult [the docs](https://docs.getdbt.com/docs/profile-cratedb).
+consult [the docs].
 
 ## About dbt
 
@@ -26,10 +28,17 @@ dbt enables data analysts and engineers to transform their data using the same p
 
 dbt is the T in ELT. Organize, cleanse, denormalize, filter, rename, and pre-aggregate the raw data in your warehouse so that it's ready for analysis.
 
+## About CrateDB
+
+CrateDB is a distributed and scalable SQL database for storing and analyzing
+massive amounts of data in near real-time, even with complex queries.
+It is PostgreSQL-compatible, and based on Lucene.
+
 ## Getting started
 
-- [Install dbt](https://docs.getdbt.com/docs/installation)
-- Read the [introduction](https://docs.getdbt.com/docs/introduction/) and [viewpoint](https://docs.getdbt.com/docs/about/viewpoint/)
+- [Install dbt](https://docs.getdbt.com/docs/core/installation-overview)
+- Read the [introduction](https://docs.getdbt.com/docs/introduction/) and
+  [viewpoint](https://docs.getdbt.com/community/resources/viewpoint)
 
 ## Installation
 Install dbt-cratedb2.
@@ -37,32 +46,26 @@ Install dbt-cratedb2.
 pip install --upgrade 'dbt-cratedb2'
 ```
 
-### `psycopg2-binary` vs. `psycopg2`
-
-By default, `dbt-cratedb2` installs `psycopg2-binary`. This is great for development, and even testing, as it does not require any OS dependencies; it's a pre-built wheel. However, building `psycopg2` from source will grant performance improvements that are desired in a production environment. In order to install `psycopg2`, use the following steps:
-
-```bash
-if [[ $(pip show psycopg2-binary) ]]; then
-    PSYCOPG2_VERSION=$(pip show psycopg2-binary | grep Version | cut -d " " -f 2)
-    pip uninstall -y psycopg2-binary
-    pip install psycopg2==$PSYCOPG2_VERSION
-fi
-```
-
-This ensures the version of `psycopg2` will match that of `psycopg2-binary`.
-
+## `psycopg2`
+By default, `dbt-cratedb2` installs `psycopg2-binary`.
+For more information, please visit [psycopg2 notes](./docs/psycopg2.md).
 
 ## Contribute
 
-- Want to report a bug or request a feature? Let us know by [opening an issue](https://github.com/crate-workbench/dbt-cratedb2/issues/new)
-- Want to help us build dbt-cratedb2? Check out the [contributing guide](https://github.com/crate-workbench/dbt-cratedb2/blob/main/CONTRIBUTING.md)
-- Join the community on the [CrateDB Community Discourse](https://community.cratedb.com/)
+- Want to report a bug or request a feature? Let us know by [opening an issue]
+- Want to help us build dbt-cratedb2? Check out the [contributing guide]
+- Join the community on the [CrateDB Community Discourse]
 
 ## Code of Conduct
 
-Everyone interacting with Crate.io's codebases, issue trackers, chat rooms, and mailing lists, please follow the [CrateDB Code of Conduct](https://github.com/crate/crate/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting with Crate.io's codebases, issue trackers, chat rooms, and mailing lists, please follow the [CrateDB Code of Conduct].
 
 
+[contributing guide]: https://github.com/crate-workbench/dbt-cratedb2/blob/main/CONTRIBUTING.md
 [CrateDB]: https://github.com/crate/crate
+[CrateDB Code of Conduct]: https://github.com/crate/crate/blob/master/CODE_OF_CONDUCT.md
+[CrateDB Community Discourse]: https://community.cratedb.com/
 [dbt]: https://www.getdbt.com/
 [dbt-postgres]: https://github.com/dbt-labs/dbt-postgres
+[opening an issue]: https://github.com/crate-workbench/dbt-cratedb2/issues/new
+[the docs]: https://docs.getdbt.com/docs/core/connect-data-platform/cratedb-setup
