@@ -4,11 +4,11 @@
   <img src="https://github.com/user-attachments/assets/70485bb9-9809-46ce-a189-858676780b2b" alt="dbt logo" width="500"/>
 </p>
 <p align="center">
-  <a href="https://github.com/crate-workbench/dbt-cratedb2/actions/workflows/unit-tests.yml">
-    <img src="https://github.com/crate-workbench/dbt-cratedb2/actions/workflows/unit-tests.yml/badge.svg?event=push" alt="CI Badge » Unit Tests"/>
+  <a href="https://github.com/crate/dbt-cratedb2/actions/workflows/unit-tests.yml">
+    <img src="https://github.com/crate/dbt-cratedb2/actions/workflows/unit-tests.yml/badge.svg?event=push" alt="CI Badge » Unit Tests"/>
   </a>
-  <a href="https://github.com/crate-workbench/dbt-cratedb2/actions/workflows/integration-tests.yml">
-    <img src="https://github.com/crate-workbench/dbt-cratedb2/actions/workflows/integration-tests.yml/badge.svg?event=push" alt="CI Badge » Integration Tests"/>
+  <a href="https://github.com/crate/dbt-cratedb2/actions/workflows/integration-tests.yml">
+    <img src="https://github.com/crate/dbt-cratedb2/actions/workflows/integration-tests.yml/badge.svg?event=push" alt="CI Badge » Integration Tests"/>
   </a>
 </p>
 
@@ -48,7 +48,7 @@ pip install --upgrade 'dbt-cratedb2'
 
 ## `psycopg2`
 By default, `dbt-cratedb2` installs `psycopg2-binary`.
-For more information, please visit [psycopg2 notes](./docs/psycopg2.md).
+For more information, please visit [psycopg2 notes].
 
 ## Contribute
 
@@ -61,11 +61,12 @@ For more information, please visit [psycopg2 notes](./docs/psycopg2.md).
 Everyone interacting with Crate.io's codebases, issue trackers, chat rooms, and mailing lists, please follow the [CrateDB Code of Conduct].
 
 
-[contributing guide]: https://github.com/crate-workbench/dbt-cratedb2/blob/main/CONTRIBUTING.md
+[contributing guide]: https://github.com/crate/dbt-cratedb2/blob/main/CONTRIBUTING.md
 [CrateDB]: https://github.com/crate/crate
 [CrateDB Code of Conduct]: https://github.com/crate/crate/blob/master/CODE_OF_CONDUCT.md
 [CrateDB Community Discourse]: https://community.cratedb.com/
 [dbt]: https://www.getdbt.com/
 [dbt-postgres]: https://github.com/dbt-labs/dbt-postgres
-[opening an issue]: https://github.com/crate-workbench/dbt-cratedb2/issues/new
+[opening an issue]: https://github.com/crate/dbt-cratedb2/issues/new
+[psycopg2 notes]: https://github.com/crate/dbt-cratedb2/blob/genesis/docs/psycopg2.md
 [the docs]: https://docs.getdbt.com/docs/core/connect-data-platform/cratedb-setup
