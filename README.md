@@ -12,33 +12,39 @@
   </a>
 </p>
 
-## dbt-cratedb2
+# dbt-cratedb2
+
+[![Package version][badge-package-version]][project-pypi]
+[![Downloads per month][badge-downloads-per-month]][project-downloads]
+[![Supported Python versions][badge-python-versions]][project-pypi]
+[![License][badge-license]][project-license]
+[![Status][badge-status]][project-pypi]
 
 The `dbt-cratedb2` package contains all the code enabling [dbt] to work with a
 [CrateDB] database.
+
+**[dbt]** enables data analysts and engineers to transform their data using the
+same practices that software engineers use to build applications.
+dbt is the T in ELT. Organize, cleanse, denormalize, filter, rename, and
+pre-aggregate the raw data in your warehouse so that it's ready for analysis.
+
+**[CrateDB]** is a distributed and scalable SQL database for storing and
+analyzing massive amounts of data in near real-time, even with complex queries.
+It is PostgreSQL-compatible, and based on Lucene.
+
+## What's Inside
 
 CrateDB is PostgreSQL-compatible, that's why dbt-cratedb2
 heavily builds upon the canonical [dbt-postgres] adapter.
 For more information on using dbt with CrateDB,
 consult [the docs].
 
-## About dbt
-
-dbt enables data analysts and engineers to transform their data using the same practices that software engineers use to build applications.
-
-dbt is the T in ELT. Organize, cleanse, denormalize, filter, rename, and pre-aggregate the raw data in your warehouse so that it's ready for analysis.
-
-## About CrateDB
-
-CrateDB is a distributed and scalable SQL database for storing and analyzing
-massive amounts of data in near real-time, even with complex queries.
-It is PostgreSQL-compatible, and based on Lucene.
-
 ## Getting started
 
 - [Install dbt](https://docs.getdbt.com/docs/core/installation-overview)
 - Read the [introduction](https://docs.getdbt.com/docs/introduction/) and
   [viewpoint](https://docs.getdbt.com/community/resources/viewpoint)
+- Read about how to [use dbt with CrateDB]
 
 ## Installation
 Install dbt-cratedb2.
@@ -58,7 +64,8 @@ For more information, please visit [psycopg2 notes].
 
 ## Code of Conduct
 
-Everyone interacting with Crate.io's codebases, issue trackers, chat rooms, and mailing lists, please follow the [CrateDB Code of Conduct].
+Everyone interacting with Crate.io's codebases, issue trackers, chat rooms, and
+mailing lists, please follow the [CrateDB Code of Conduct].
 
 
 [contributing guide]: https://github.com/crate/dbt-cratedb2/blob/main/CONTRIBUTING.md
@@ -70,3 +77,13 @@ Everyone interacting with Crate.io's codebases, issue trackers, chat rooms, and 
 [opening an issue]: https://github.com/crate/dbt-cratedb2/issues/new
 [psycopg2 notes]: https://github.com/crate/dbt-cratedb2/blob/genesis/docs/psycopg2.md
 [the docs]: https://docs.getdbt.com/docs/core/connect-data-platform/cratedb-setup
+[use dbt with CrateDB]: https://cratedb.com/docs/guide/integrate/dbt/
+
+[badge-downloads-per-month]: https://pepy.tech/badge/dbt-cratedb2/month
+[badge-license]: https://img.shields.io/github/license/crate/dbt-cratedb2.svg
+[badge-package-version]: https://img.shields.io/pypi/v/dbt-cratedb2.svg
+[badge-python-versions]: https://img.shields.io/pypi/pyversions/dbt-cratedb2.svg
+[badge-status]: https://img.shields.io/pypi/status/dbt-cratedb2.svg
+[project-downloads]: https://pepy.tech/project/dbt-cratedb2/
+[project-license]: https://github.com/crate/dbt-cratedb2/blob/main/LICENSE
+[project-pypi]: https://pypi.org/project/dbt-cratedb2
