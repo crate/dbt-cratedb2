@@ -7,6 +7,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## Unreleased
 
 - Add integration test case with CrateDB using `rename_relation`
+- Macro: Add `cratedb__reset_csv_table` for using `DELETE FROM`
+  instead of `TRUNCATE`. Thanks, @hlcianfagna.
 
 ## v0.0.2 - November 26, 2024
 
