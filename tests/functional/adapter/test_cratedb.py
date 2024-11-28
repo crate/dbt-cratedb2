@@ -40,6 +40,26 @@ SELECT TRUE
 """
 
 
+reset_csv_table = """
+{# Create a random table. #}
+{% set exists, random_table = get_or_create_relation(database=None, schema=target.schema, identifier="random_table", type="table") %}
+{% set sql = get_create_table_as_sql(False, random_table, "SELECT 42 as value") %}
+{% do run_query(sql) %}
+
+{#
+This is a little excerpt from dbt/include/global_project/macros/materializations/seeds/seed.sql
+#}
+{% set full_refresh = (should_full_refresh()) %}
+{% set agate_table = None %}
+{% set sql_ddl = reset_csv_table(model=model, full_refresh=full_refresh, old_relation=random_table, agate_table=agate_table) %}
+{% set sql_dml = load_csv_rows(model, agate_table) %}
+{% set sql = get_csv_sql(sql_ddl, sql_dml) %}
+{% do run_query(sql) %}
+
+SELECT TRUE
+"""
+
+
 class TestCrateDB:
     """
     A few test cases for specifically validating concerns of CrateDB.
@@ -51,6 +71,7 @@ class TestCrateDB:
             "basic.sql": basic_sql,
             "rename_table.sql": rename_table_sql,
             "rename_view.sql": rename_view_sql,
+            "reset_csv_table.sql": reset_csv_table,
         }
 
     @pytest.fixture(autouse=True)
@@ -102,3 +123,14 @@ class TestCrateDB:
 
         records = common.get_records(project, "view_target")
         assert records == [(42,)]
+
+    def test_reset_csv(self, project):
+        """
+        CrateDB needs an override for the `reset_csv_table` macro. Make sure it is in place.
+        """
+
+        result = run_dbt(["run", "--select", "reset_csv_table"])
+        assert len(result) == 1
+
+        records = common.get_records(project, "reset_csv_table")
+        assert records == [(True,)]
