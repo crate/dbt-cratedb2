@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import pytest
 from dbt.tests.adapter.simple_snapshot import common
 
@@ -39,6 +41,13 @@ rename_view_sql = """
 SELECT TRUE
 """
 
+seed_mini = """
+id,name,some_date
+1,Easton,1981-05-20T06:46:51
+2,Lillian,1978-09-03T18:10:33
+3,Jeremiah,1982-03-11T03:59:51
+"""
+
 
 reset_csv_table = """
 {# Create a random table. #}
@@ -59,11 +68,20 @@ This is a little excerpt from dbt/include/global_project/macros/materializations
 SELECT TRUE
 """
 
+select_from_seed = """
+{% set seed_mini = ref('seed_mini') %}
+SELECT * FROM {{ seed_mini }}
+"""
+
 
 class TestCrateDB:
     """
     A few test cases for specifically validating concerns of CrateDB.
     """
+
+    @pytest.fixture(scope="class")
+    def seeds(self):
+        return {"seed_mini.csv": seed_mini}
 
     @pytest.fixture(scope="class")
     def models(self):
@@ -72,6 +90,7 @@ class TestCrateDB:
             "rename_table.sql": rename_table_sql,
             "rename_view.sql": rename_view_sql,
             "reset_csv_table.sql": reset_csv_table,
+            "select_from_seed.sql": select_from_seed,
         }
 
     @pytest.fixture(autouse=True)
@@ -134,3 +153,23 @@ class TestCrateDB:
 
         records = common.get_records(project, "reset_csv_table")
         assert records == [(True,)]
+
+    def test_seed(self, project):
+        """
+        Verify seeding works well, even when called twice.
+        """
+
+        result = run_dbt(["seed", "--select", "seed_mini"])
+        assert len(result) == 1
+        result = run_dbt(["seed", "--select", "seed_mini"])
+        assert len(result) == 1
+
+        result = run_dbt(["run", "--select", "select_from_seed"])
+        assert len(result) == 1
+
+        records = common.get_records(project, "select_from_seed")
+        # TODO: Is it really correct to receive four records here,
+        #       where the header definition is apparently included?
+        assert len(records) == 4
+        assert ("id", "name", "some_date") in records
+        assert ("1", "Easton", "1981-05-20T06:46:51") in records
