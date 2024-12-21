@@ -50,12 +50,12 @@ path = "dbt/adapters/cratedb/__version__.py"
 [tool.hatch.envs.default]
 dependencies = [
     "dbt-tests-adapter<1.11",
-    "pre-commit==3.7.0",
-    "freezegun",
-    "pytest",
-    "pytest-dotenv",
-    "pytest-mock",
-    "pytest-xdist",
+    "freezegun<2",
+    "pre-commit<5",
+    "pytest<9",
+    "pytest-dotenv<0.6",
+    "pytest-mock<4",
+    "pytest-xdist<4",
 ]
 [tool.hatch.envs.default.env-vars]
 DBT_TEST_USER_1 = "dbt_test_user_1"
