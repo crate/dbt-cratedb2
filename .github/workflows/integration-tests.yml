@@ -135,7 +135,7 @@ jobs:
           crash -c "SET GLOBAL PERSISTENT cluster.max_shards_per_node = 5000;"
 
       - name: Run integration tests
-        run: hatch run integration-tests
+        run: hatch --verbose run integration-tests
         env:
           POSTGRES_TEST_HOST: localhost
           POSTGRES_TEST_PORT: 5432
