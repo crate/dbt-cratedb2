@@ -98,7 +98,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        if: ${{ github.event_name == 'pull_request'|| github.event_name == 'push' }}
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'schedule' }}
         uses: actions/checkout@v4
 
       - name: Check out the repository (workflow_dispatch)
