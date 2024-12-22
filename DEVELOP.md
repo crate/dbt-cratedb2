@@ -21,3 +21,20 @@ Invoke software tests.
 hatch run unit-tests
 hatch run integration-tests
 ```
+
+## Release
+- Bump version in `dbt/adapters/cratedb/__version__.py`.
+- Edit `CHANGELOG.md`, designating a new release.
+- Repository: Tag and Push.
+  ```shell
+  git commit -m "Release v0.1.0"
+  git tag v0.1.0
+  git push && git push --tags
+  ```
+- PyPI: Build and publish
+  ```shell
+  hatch build
+  hatch publish
+  ```
+- GitHub: Designate new release.
+  https://github.com/crate/dbt-cratedb2/releases
