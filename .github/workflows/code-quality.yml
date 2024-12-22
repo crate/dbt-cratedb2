@@ -18,6 +18,8 @@ on:
         description: "The branch of dbt-adapters to evaluate"
         type: string
         default: "main"
+  schedule:
+    - cron: '0 3 * * *'
 
 permissions: read-all
 
