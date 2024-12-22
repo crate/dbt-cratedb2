@@ -62,6 +62,8 @@ on:
         type: string
         required: false
         default: "main"
+  schedule:
+    - cron: '0 3 * * *'
 
 permissions: read-all
 
