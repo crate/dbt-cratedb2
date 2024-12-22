@@ -16,6 +16,7 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows",
+    "Operating System :: OS Independent",
     "Operating System :: POSIX :: Linux",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -29,11 +30,14 @@ dependencies = [
     "sql-metadata<3",
 ]
 [project.urls]
-Homepage = "https://github.com/crate/dbt-cratedb2"
-Documentation = "https://github.com/crate/dbt-cratedb2/"
-Repository = "https://github.com/crate/dbt-cratedb2.git"
-Issues = "https://github.com/crate/dbt-cratedb2/issues"
 Changelog = "https://github.com/crate/dbt-cratedb2/blob/main/CHANGELOG.md"
+Documentation = "https://cratedb.com/docs/guide/integrate/dbt/"
+Downloads = "https://pypi.org/project/dbt-cratedb2/#files"
+Homepage = "https://github.com/crate/dbt-cratedb2"
+Issues = "https://github.com/crate/dbt-cratedb2/issues"
+"Release Notes" = "https://github.com/crate/dbt-cratedb2/releases"
+Repository = "https://github.com/crate/dbt-cratedb2"
+"Source Code" = "https://github.com/crate/dbt-cratedb2"
 
 [build-system]
 requires = ["hatchling"]

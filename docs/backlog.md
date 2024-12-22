@@ -16,6 +16,8 @@ From `release-internal.yml` GHA workflow.
 ```shell
 python -c "import dbt.adapters.cratedb"
 ```
+- https://docs.getdbt.com/docs/build/data-tests
+- https://docs.getdbt.com/reference/node-selection/test-selection-examples
 
 ## Testing (from upstream)
 
