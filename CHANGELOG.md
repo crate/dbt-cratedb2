@@ -6,6 +6,9 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+- Fixed changes not being materialized when using an incremental materialization
+  model. Thanks, @hlcianfagna.
+
 ## v0.1.0 - December 22, 2024
 - Tests: Added integration test case with CrateDB using `rename_relation`
 - Macro: Added `cratedb__reset_csv_table` for using `DELETE FROM`
