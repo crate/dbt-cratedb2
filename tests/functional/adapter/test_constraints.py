@@ -122,7 +122,30 @@ class TestModelConstraintsRuntimeEnforcement(
 
 
 class TestConstraintQuotedColumn(BaseConstraintQuotedColumn):
-    pass
+
+    @pytest.fixture(scope="class")
+    def expected_sql(self):
+        return """
+    create table <model_identifier> (
+        id integer not null,
+        "from" text not null,
+        date_day text,
+        check (("from" = 'blue'))
+    ) ;
+    insert into <model_identifier> (
+        id, "from", date_day
+    )
+    (
+        select id, "from", date_day
+        from (
+            select
+              'blue' as "from",
+              1 as id,
+              '2019-01-01' as date_day
+        ) as model_subq
+    );
+    refresh table <model_identifier>
+    """
 
 
 class TestIncrementalForeignKeyConstraint(BaseIncrementalForeignKeyConstraint):

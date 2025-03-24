@@ -37,6 +37,7 @@
   (
     {{ sql }}
   );
+  REFRESH TABLE {{ relation }};
 {%- endmacro %}
 
 {% macro cratedb__drop_relation(relation) -%}
