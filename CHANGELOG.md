@@ -6,6 +6,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v0.1.1 - March 24, 2025
 - Fixed changes not being materialized when using an incremental materialization
   model. Thanks, @hlcianfagna.
 
