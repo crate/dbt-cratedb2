@@ -108,7 +108,7 @@ jobs:
           ref: ${{ inputs.adapter_branch }}
 
       - name: Update Adapters and Core branches
-        if: ${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch'}}
+        if: ${{ github.event_name == 'workflow_call' || github.event_name == 'workflow_dispatch' }}
         run: |
           ./.github/scripts/update_dev_dependency_branches.sh \
             ${{ inputs.dbt_adapters_branch }} \
