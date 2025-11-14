@@ -13,8 +13,9 @@ models:
       - name: foo
         data_tests:
           - accepted_values:
-              values: [3]
-              quote: false
+              arguments:
+                values: [3]
+                quote: false
               config:
                 severity: warn
   - name: second_model
@@ -22,8 +23,9 @@ models:
       - name: bar
         data_tests:
           - accepted_values:
-              values: [3]
-              quote: false
+              arguments:
+                values: [3]
+                quote: false
               config:
                 severity: warn
   - name: union_model
@@ -31,8 +33,9 @@ models:
       - name: sum3
         data_tests:
           - accepted_values:
-              values: [3]
-              quote: false
+              arguments:
+                values: [3]
+                quote: false
 """
 
 macros__alter_timezone_sql = """

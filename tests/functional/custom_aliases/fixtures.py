@@ -57,12 +57,14 @@ models:
       - name: model_name
         data_tests:
           - accepted_values:
-             values: ['custom_alias']
+              arguments:
+                values: ['custom_alias']
   - name: model2
     columns:
       - name: model_name
         data_tests:
           - accepted_values:
-             values: ['model2']
+              arguments:
+                values: ['model2']
 
 """
