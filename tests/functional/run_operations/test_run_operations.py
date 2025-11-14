@@ -7,7 +7,7 @@ from dbt.tests.util import (
     rm_file,
     write_file,
 )
-from dbt_common.exceptions import DbtInternalError
+from dbt_common.exceptions import DbtInternalError, UndefinedMacroError
 import pytest
 import yaml
 
@@ -79,7 +79,7 @@ class TestOperations:
 
     def test_macro_missing(self, project):
         with pytest.raises(
-            DbtInternalError,
+            UndefinedMacroError,
             match="dbt could not find a macro with the name 'this_macro_does_not_exist' in any package",
         ):
             self.run_operation("this_macro_does_not_exist", False)
