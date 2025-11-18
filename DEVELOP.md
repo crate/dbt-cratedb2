@@ -10,16 +10,20 @@ uv pip install hatch
 ## Usage
 Start CrateDB.
 ```shell
-docker run --rm -it --name=cratedb \
+docker run --rm --name=cratedb \
   --publish=4200:4200 --publish=5432:5432 \
   --env=CRATE_HEAP_SIZE=8g crate/crate:nightly \
-  -Ccluster.max_shards_per_node=5000 \
-  -Cdiscovery.type=single-node
+  '-Ccluster.max_shards_per_node=5000' \
+  '-Cdiscovery.type=single-node'
 ```
 Invoke software tests.
 ```shell
 hatch run unit-tests
 hatch run integration-tests
+```
+Invoke software tests selectively (it's just pytest).
+```shell
+hatch run integration-tests -k test_macro_missing
 ```
 
 ## Release
