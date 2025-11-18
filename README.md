@@ -14,11 +14,10 @@
 
 # dbt-cratedb2
 
-[![Bluesky][badge-bluesky]][project-bluesky]
+[![Package version][badge-package-version]][project-pypi]
 [![Release Notes][badge-release-notes]][project-release-notes]
 [![Downloads per month][badge-downloads-per-month]][project-downloads]
 
-[![Package version][badge-package-version]][project-pypi]
 [![License][badge-license]][project-license]
 [![Status][badge-status]][project-pypi]
 [![Supported Python versions][badge-python-versions]][project-pypi]
