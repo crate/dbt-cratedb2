@@ -95,10 +95,6 @@ class TestCrateDB:
 
     @pytest.fixture(autouse=True)
     def clean_up(self, project):
-        """
-        TODO: The standard way of cleaning up resources probably does not work,
-              because `drop_schema` is not implemented, and has been made a no-op.
-        """
         yield
         with project.adapter.connection_named("__test"):
             relation = project.adapter.Relation.create(

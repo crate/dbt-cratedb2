@@ -24,8 +24,7 @@ class TestExternalReference:
 
     def test_external_reference(self, project, unique_schema):
         external_schema = unique_schema + "z"
-        # TODO: CrateDB `CREATE SCHEMA` not supported.
-        # project.run_sql(f'create schema "{external_schema}"')
+        project.run_sql(f'create schema "{external_schema}"')
         project.run_sql(f'create table "{external_schema}"."external" (id integer)')
         project.run_sql(f'insert into "{external_schema}"."external" values (1), (2)')
 
@@ -49,8 +48,7 @@ class TestExternalDependency:
         assert len(results) == 1
 
         external_schema = unique_schema + "z"
-        # TODO: CrateDB `CREATE SCHEMA` not supported.
-        # project.run_sql(f'create schema "{external_schema}"')
+        project.run_sql(f'create schema "{external_schema}"')
         project.run_sql(
             f'create view "{external_schema}"."external" as (select * from {unique_schema}.model)'
         )
