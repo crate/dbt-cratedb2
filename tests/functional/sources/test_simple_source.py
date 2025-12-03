@@ -35,13 +35,9 @@ class SuccessfulSourcesTest(BaseSourcesTest):
         return {"macro.sql": macros_macro_sql}
 
     def _create_schemas(self, project):
-        """
-        # TODO: CrateDB adjustments.
-
         schema = self.alternative_schema(project.test_schema)
         project.run_sql(f"drop schema if exists {schema} cascade")
         project.run_sql(f"create schema {schema}")
-        """
 
     def alternative_schema(self, test_schema):
         return test_schema + "_other"
