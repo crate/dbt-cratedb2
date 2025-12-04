@@ -36,7 +36,7 @@ class SuccessfulSourcesTest(BaseSourcesTest):
 
     def _create_schemas(self, project):
         schema = self.alternative_schema(project.test_schema)
-        project.run_sql(f"drop schema if exists {schema} cascade")
+        project.run_sql(f"drop schema if exists {schema}")
         project.run_sql(f"create schema {schema}")
 
     def alternative_schema(self, test_schema):

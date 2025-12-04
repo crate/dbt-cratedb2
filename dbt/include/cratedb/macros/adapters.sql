@@ -52,6 +52,15 @@
   {%- endcall %}
 {% endmacro %}
 
+{% macro cratedb__drop_schema(relation) -%}
+  {% if relation.database -%}
+    {{ adapter.verify_database(relation.database) }}
+  {%- endif -%}
+  {%- call statement('drop_schema') -%}
+    drop schema if exists {{ relation.without_identifier().include(database=False) }}
+  {%- endcall -%}
+{% endmacro %}
+
 {# CrateDB: `COMMENT ON` not supported. #}
 {% macro cratedb__alter_relation_comment(relation, comment) %}
   {% set escaped_comment = postgres_escape_comment(comment) %}

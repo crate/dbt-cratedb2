@@ -34,7 +34,7 @@ def assert_correct_schemas(project):
 
 
 def clear_schema(project):
-    project.run_sql("drop schema if exists {schema} cascade")
+    project.run_sql("drop schema if exists {schema}")
     project.run_sql("create schema {schema}")
 
 
