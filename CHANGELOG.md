@@ -6,6 +6,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 - QA: Validated against dbt-core 1.10
+- SQL: Added support for `{CREATE,DROP} SCHEMA`, provided by CrateDB 6.2
 
 ## v0.1.1 - March 24, 2025
 - Fixed changes not being materialized when using an incremental materialization
