@@ -103,7 +103,7 @@ class TestPostgresConnection(TestCase):
         )
         self.adapter.drop_schema(relation)
 
-        self.mock_execute.assert_has_calls([mock.call("/* dbt */\n\n    SELECT 1", None)])
+        self.mock_execute.assert_has_calls([mock.call('/* dbt */\ndrop schema if exists "test_schema" cascade', None)])
 
     def test_quoting_on_drop(self):
         relation = self.adapter.Relation.create(

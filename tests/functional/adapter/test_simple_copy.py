@@ -6,7 +6,6 @@ from dbt.tests.adapter.simple_copy.test_simple_copy import (
 )
 
 
-@pytest.mark.skip("CrateDB: `CREATE SCHEMA` not supported")
 class TestSimpleCopyUppercase(BaseSimpleCopyUppercase):
     @pytest.fixture(scope="class")
     def dbt_profile_target(self):
